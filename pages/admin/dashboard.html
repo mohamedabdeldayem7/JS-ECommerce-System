@@ -32,7 +32,7 @@
 
     <!-- for header when screen be in medium size -->
     <div
-      class="d-md-none d-flex align-items-center justify-content-between bg-white p-3 border-bottom"
+      class="d-lg-none d-flex align-items-center justify-content-between bg-white p-3 border-bottom"
     >
       <div class="d-flex align-items-center gap-2 fw-bold text-primary">
         <span class="material-symbols-rounded">local_mall</span> ShopEase
@@ -91,8 +91,9 @@
         <ul class="nav nav-pills flex-column mb-4 gap-1">
           <li class="nav-item">
             <a
-              href="product-crud.html"
+              href="javascript:void(0)"
               class="nav-link d-flex align-items-center gap-3"
+              data-target="products"
             >
               <span class="material-symbols-rounded">inventory_2</span>
               Products
@@ -100,8 +101,9 @@
           </li>
           <li class="nav-item">
             <a
-              href="categories.html"
+              href="javascript:void(0)"
               class="nav-link d-flex align-items-center gap-3"
+              data-target="categories"
             >
               <span class="material-symbols-rounded">category</span>
               Categories
@@ -113,11 +115,12 @@
         <ul class="nav nav-pills flex-column mb-4 gap-1">
           <li class="nav-item">
             <a
-              href="orders.html"
+              href="javascript:void(0)"
               class="nav-link d-flex align-items-center gap-3"
+              data-target="orders"
             >
               <span class="material-symbols-rounded">receipt_long</span>
-              Order Details
+              Orders
               <span class="badge bg-danger rounded-pill ms-auto">0</span>
             </a>
           </li>
@@ -127,8 +130,9 @@
         <ul class="nav nav-pills flex-column gap-1">
           <li class="nav-item">
             <a
-              href="customers.html"
+              href="javascript:void(0)"
               class="nav-link d-flex align-items-center gap-3"
+              data-target="admin"
             >
               <span class="material-symbols-rounded">person_add</span>
               Add admins
@@ -150,21 +154,96 @@
     </aside>
 
     <!-- / end aside -->
+    <!-- start main -->
+    <main class="main-content mt-1">
+      <!-- status cards -->
+      <div class="container-fluid px-3 mb-5">
+        <div class="row g-3">
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card border-0 p-4">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="stat-label mb-2">Total Sales</p>
+                  <h3 class="stat-value mb-0">$24,500</h3>
+                </div>
+                <div class="stat-icon bg-success-light text-success">
+                  <span class="material-symbols-rounded">payments</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card border-0 p-4">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="stat-label mb-2">Total Orders</p>
+                  <h3 class="stat-value mb-0">1,240</h3>
+                </div>
+                <div class="stat-icon bg-primary-light text-primary">
+                  <span class="material-symbols-rounded">shopping_cart</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card border-0 p-4">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="stat-label mb-2">Total Products</p>
+                  <h3 class="stat-value mb-0">856</h3>
+                </div>
+                <div class="stat-icon bg-info-light text-info">
+                  <span class="material-symbols-rounded">inventory_2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card border-0 p-4">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="stat-label mb-2">Low Stock</p>
+                  <h3 class="stat-value mb-0">12</h3>
+                </div>
+                <div class="stat-icon bg-danger-light text-danger">
+                  <span class="material-symbols-rounded">warning</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- / status cards -->
+      <!-- main sections -->
+      <section id="products" class="content-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold">Products</h2>
+          <button class="btn btn-primary">
+            <span class="material-symbols-rounded">add</span> Add Product
+          </button>
+        </div>
+      </section>
+
+      <section id="categories" class="content-section d-none">
+        <h2 class="fw-bold mb-4">Categories</h2>
+      </section>
+
+      <section id="orders" class="content-section d-none">
+        <h2 class="fw-bold mb-4">Orders</h2>
+      </section>
+
+      <section id="admin" class="content-section d-none">
+        <h2 class="fw-bold mb-4">ADD ADMIN</h2>
+      </section>
+      <!-- / main sections -->
+    </main>
+    <!-- / end main -->
 
     <!-- script -->
-    <script
-      type="module"
-      src="../../src/modules/admin/product-crud.js"
-    ></script>
+    <script src="../../src/modules/admin/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      function toggleSidebar() {
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("overlay");
-
-        sidebar.classList.toggle("active");
-        overlay.classList.toggle("active");
-      }
-    </script>
   </body>
 </html>
