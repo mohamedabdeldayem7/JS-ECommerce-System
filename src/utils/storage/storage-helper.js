@@ -1,4 +1,4 @@
-export const storageManager = {
+export class StorageManager {
   get(key) {
     try {
       const item = localStorage.getItem(key);
@@ -7,7 +7,7 @@ export const storageManager = {
       console.error(`Error reading key "${key}" from localStorage:`, error);
       return null;
     }
-  },
+  }
 
   set(key, value) {
     try {
@@ -16,7 +16,7 @@ export const storageManager = {
     } catch (error) {
       console.error(`Error saving to localStorage:`, error);
     }
-  },
+  }
 
   pushToItem(key, newValue) {
     let data = this.get(key) || [];
@@ -27,7 +27,7 @@ export const storageManager = {
     } else {
       console.warn(`Key "${key}" is not an Array. Cannot push.`);
     }
-  },
+  }
 
   remove(key, id) {
     let data = this.get(key);
@@ -40,7 +40,7 @@ export const storageManager = {
     const newData = data.filter((e) => e.id !== id);
 
     this.set(key, newData);
-  },
+  }
 
   update(key, value) {
     let data = this.get(key),
@@ -63,5 +63,5 @@ export const storageManager = {
     !flag
       ? console.error(`This ${key} cannot be updated`)
       : this.set(key, UpdatedData);
-  },
-};
+  }
+}
