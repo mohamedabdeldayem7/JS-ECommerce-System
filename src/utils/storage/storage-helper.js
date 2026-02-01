@@ -1,4 +1,4 @@
-export class StorageManager {
+export default class StorageManager {
   get(key) {
     try {
       const item = localStorage.getItem(key);
