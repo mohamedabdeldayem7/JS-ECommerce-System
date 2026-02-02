@@ -155,27 +155,74 @@ body {
 }
 /* end header */
 /* table */
-.custom-table thead th,
-.custom-footer {
-  background-color: #f8f9fc !important;
+.custom-table-container {
+  background: #ffffff;
+  border-radius: var(--bs-border-radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid #edf2f7;
+}
+
+.custom-table {
+  margin-bottom: 0;
 }
 
 .custom-table thead th {
-  font-size: 0.8rem;
+  background-color: #f8f9fc !important;
+  color: #4a5568 !important;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: black;
-  letter-spacing: 0.5px;
-  padding: 1rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid #edf2f7;
 }
 
-.custom-table tbody tr td {
-  background: var(--surface-white);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+.custom-table tbody td {
+  padding: 1.25rem 1.5rem;
+  color: #2d3748;
+  vertical-align: middle;
+  background-color: var(--surface-white);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.5);
+  transition: background-color 0.4s ease;
+  /* transition: all 1.3s; */
 }
 
-.custom-table tbody td {
-  padding: 1rem 1rem;
+.custom-table tbody tr:hover td {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.custom-table tbody tr:hover > :first-child {
+  box-shadow: inset 4px 0 0 #3b82f6;
+}
+
+.btn-action {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+}
+
+.btn-action:hover {
+  background-color: var(--surface-white);
+  transform: translateY(-1px);
+}
+
+.btn-action.text-danger:hover {
+  background-color: var(--surface-white);
+  color: #c53030 !important;
+}
+
+.custom-footer {
+  background-color: #f8f9fc !important;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #edf2f7;
 }
 
 .dot {
@@ -185,29 +232,34 @@ body {
   display: inline-block;
 }
 
-.btn-action {
-  background: transparent;
+/* start Pagination */
+.pagination .page-link {
   border: none;
-  padding: 5px;
-  transition: transform 0.2s ease;
+  background-color: transparent;
+  color: #64748b;
+  border-radius: 8px !important;
+  margin: 0 2px;
+  padding: 8px 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-.btn-action:hover {
-  transform: scale(1.2);
+.pagination .page-link:hover {
+  background-color: var(--surface-white);
+  color: var(--bs-info);
 }
 
-.page-link {
-  background: transparent;
-  color: #718096;
-  min-width: 32px;
-  text-align: center;
-  font-weight: 600;
+.pagination .page-item.active .page-link {
+  background-color: var(--bs-primary-hover);
+  color: white;
+  box-shadow: var(--shadow-md);
 }
 
-.page-item.active .page-link {
-  background-color: #0d6efd !important;
-  color: white !important;
+.pagination .page-item.disabled .page-link {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
+/* end Pagination */
 /* end table */
 
 /* end product section style */
