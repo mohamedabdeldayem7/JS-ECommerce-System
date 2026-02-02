@@ -74,6 +74,7 @@
         <ul class="nav nav-pills d-flex flex-column gap-1 mb-4">
           <li class="nav-item">
             <a
+              id="main-dashboard"
               href="dashboard.html"
               class="nav-link active d-flex align-items-center gap-3"
             >
@@ -262,6 +263,7 @@
               </button>
 
               <button
+                onclick="openAddModal()"
                 class="btn btn-primary shadow-sm px-4 d-flex align-items-center gap-2 fw-bold"
               >
                 <span class="material-symbols-rounded fs-5">add</span>
@@ -271,105 +273,125 @@
           </div>
         </div>
 
-        <div class="card border-1 shadow-md rounded-4 overflow-hidden">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
           <div class="table-responsive">
             <table class="table align-middle mb-0 custom-table">
               <thead>
                 <tr>
-                  <th class="ps-4">PRODUCT</th>
-                  <th>CATEGORY</th>
-                  <th>PRICE</th>
-                  <th>STOCK</th>
-                  <th class="text-end pe-">ACTIONS</th>
+                  <th style="width: 40%">Product</th>
+                  <th style="width: 15%">Category</th>
+                  <th style="width: 15%">Price</th>
+                  <th style="width: 15%">Stock</th>
+                  <th style="width: 15%" class="text-end">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>
-                    <div class="d-flex align-items-center gap-3">
+                  <td class="ps-4">
+                    <div class="d-flex align-items-center gap-2 gap-md-3">
                       <img
-                        src="https://via.placeholder.com/48"
-                        class="rounded-3 border shadow-sm"
+                        style="width: 50px; height: 50px; object-fit: cover"
+                        src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png"
+                        class="rounded-3 border shadow-sm flex-shrink-0"
                         alt="product"
                       />
-                      <span class="fw-bold text-dark"
-                        >Wireless Headphones Ultra</span
-                      >
+                      <div class="product-info">
+                        <span class="d-block fw-bold text-dark lh-sm"
+                          >Wireless Headphones Ultra</span
+                        >
+                      </div>
                     </div>
                   </td>
                   <td>
                     <span
-                      class="badge bg-primary-subtle text-primary border-0 px-3 py-2 rounded-pill small"
+                      class="badge bg-primary-subtle text-primary border-0 px-2 py-1 px-md-3 py-md-2 rounded-pill small"
                       >Electronics</span
                     >
                   </td>
                   <td class="fw-bold">$249.00</td>
                   <td>
                     <div class="d-flex align-items-center gap-2">
-                      <span class="dot bg-success me-1"></span>
-                      <span class="text-muted">124</span>
+                      <span class="dot bg-success"></span>
+                      <span class="text-muted small">124</span>
                     </div>
                   </td>
                   <td class="text-end pe-4">
-                    <button class="btn btn-action text-primary">
-                      <span class="material-symbols-rounded">edit</span>
-                    </button>
-                    <button class="btn btn-action text-danger">
-                      <span class="material-symbols-rounded">delete</span>
-                    </button>
+                    <div class="d-flex justify-content-end gap-1">
+                      <button
+                        class="btn btn-action text-primary p-1"
+                        onclick="openEditModal('P-8822')"
+                      >
+                        <span class="material-symbols-rounded fs-5">edit</span>
+                      </button>
+                      <button class="btn btn-action text-danger p-1">
+                        <span class="material-symbols-rounded fs-5"
+                          >delete</span
+                        >
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ps-4">
+                    <div class="d-flex align-items-center gap-2 gap-md-3">
+                      <img
+                        style="width: 50px; height: 50px; object-fit: cover"
+                        src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png"
+                        class="rounded-3 border shadow-sm flex-shrink-0"
+                        alt="product"
+                      />
+                      <div class="product-info">
+                        <span class="d-block fw-bold text-dark lh-sm"
+                          >Wireless Headphones Ultra</span
+                        >
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-primary-subtle text-primary border-0 px-2 py-1 px-md-3 py-md-2 rounded-pill small"
+                      >Electronics</span
+                    >
+                  </td>
+                  <td class="fw-bold">$249.00</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="dot bg-success"></span>
+                      <span class="text-muted small">124</span>
+                    </div>
+                  </td>
+                  <td class="text-end pe-4">
+                    <div class="d-flex justify-content-end gap-1">
+                      <button
+                        class="btn btn-action text-primary p-1"
+                        onclick="openEditModal('P-8822')"
+                      >
+                        <span class="material-symbols-rounded fs-5">edit</span>
+                      </button>
+                      <button class="btn btn-action text-danger p-1">
+                        <span class="material-symbols-rounded fs-5"
+                          >delete</span
+                        >
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-
-            <div
-              class="card-footer custom-footer border-top-0 p-3 d-flex justify-content-between align-items-center"
-            >
-              <span class="text-muted small ps-2"
-                >Showing 1 to 2 of 48 entries</span
-              >
-              <nav>
-                <ul class="pagination pagination-sm mb-0 gap-1 pe-2">
-                  <li class="page-item">
-                    <a class="page-link border-0 text-muted" href="#"
-                      ><span class="material-symbols-rounded fs-5"
-                        >chevron_left</span
-                      ></a
-                    >
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link border-0 rounded-3 shadow-sm" href="#"
-                      >1</a
-                    >
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link border-0 text-dark rounded-3" href="#"
-                      >2</a
-                    >
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link border-0 text-dark rounded-3" href="#"
-                      >3</a
-                    >
-                  </li>
-                  <li class="page-item disabled">
-                    <span class="page-link border-0 text-muted">...</span>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link border-0 text-dark rounded-3" href="#"
-                      >10</a
-                    >
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link border-0 text-muted" href="#"
-                      ><span class="material-symbols-rounded fs-5"
-                        >chevron_right</span
-                      ></a
-                    >
-                  </li>
-                </ul>
-              </nav>
+          </div>
+          <div
+            class="card-footer custom-footer d-flex justify-content-between align-items-center p-3"
+          >
+            <div class="text-muted small" id="paginationInfo">
+              Showing 1 to 5 of 20 entries
             </div>
+
+            <nav>
+              <ul
+                class="pagination pagination-sm mb-0 gap-1"
+                id="paginationContainer"
+              ></ul>
+            </nav>
           </div>
         </div>
       </section>
@@ -390,8 +412,126 @@
     </main>
     <!-- / end main -->
 
+    <!-- start modals -->
+    <!-- product modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+          <div class="modal-header border-bottom-0 p-4">
+            <h5 class="modal-title fw-bold" id="modalTitle">Add New Product</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body p-4 pt-0">
+            <form id="productForm">
+              <input type="hidden" id="editProductId" />
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary"
+                  >Product Name</label
+                >
+                <input
+                  type="text"
+                  class="form-control rounded-3 p-2"
+                  id="prodName"
+                  required
+                  placeholder="e.g. iPhone 15 Pro"
+                />
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label small fw-bold text-secondary"
+                    >Stock Quantity</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control rounded-3 p-2"
+                    id="prodStock"
+                    required
+                    placeholder="e.g. 50"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label small fw-bold text-secondary"
+                    >Price ($)</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control rounded-3 p-2"
+                    id="prodPrice"
+                    required
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary"
+                  >Category</label
+                >
+                <select class="form-select rounded-3 p-2" id="prodCategory">
+                  <option value="Electronics">Electronics</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="Clothing">Clothing</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary"
+                  >Image</label
+                >
+                <input
+                  type="url"
+                  class="form-control rounded-3 p-2"
+                  id="Pimage"
+                  required
+                  placeholder="inter Product Image Url"
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary"
+                  >Description</label
+                >
+                <textarea
+                  class="form-control rounded-3 p-2"
+                  id="Pimage"
+                  required
+                  placeholder="You can describe product here"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer border-top-0 p-4">
+            <button
+              type="button"
+              class="btn btn-light rounded-3 px-4"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="productForm"
+              class="btn btn-primary rounded-3 px-4"
+              id="saveBtn"
+            >
+              Save Product
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / product modal -->
+    <!-- / end modals -->
     <!-- script -->
-    <script src="../../src/modules/admin/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../src/modules/admin/dashboard.js"></script>
   </body>
 </html>
