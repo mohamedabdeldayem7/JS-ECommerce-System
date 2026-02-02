@@ -218,14 +218,162 @@
       </div>
       <!-- / status cards -->
       <!-- main sections -->
-      <section id="products" class="content-section">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h2 class="fw-bold">Products</h2>
-          <button class="btn btn-primary">
-            <span class="material-symbols-rounded">add</span> Add Product
-          </button>
+      <!-- product section -->
+      <section id="products" class="content-section active px-3">
+        <div
+          class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-4 mb-5"
+        >
+          <div class="d-flex align-items-center gap-3">
+            <div
+              class="bg-primary-subtle p-2 rounded-3 text-primary d-flex align-items-center justify-content-center"
+              style="width: 50px; height: 50px"
+            >
+              <span class="material-symbols-rounded fs-2">inventory_2</span>
+            </div>
+            <div>
+              <h3 class="fw-bold text-dark">Products</h3>
+              <p class="text-muted small">
+                Manage and track your store inventory
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center gap-2">
+            <div
+              class="search-box bg-white border rounded-3 px-3 d-flex align-items-center shadow-sm"
+              style="height: 44px; min-width: 45%"
+            >
+              <span class="material-symbols-rounded text-muted fs-5"
+                >search</span
+              >
+              <input
+                type="text"
+                class="form-control border-0 shadow-none bg-transparent ps-2"
+                placeholder="Search by pruduct name..."
+              />
+            </div>
+
+            <div class="w-100 d-flex justify-content-end gap-3">
+              <button
+                class="btn btn-white border shadow-sm px-3 d-flex align-items-center gap-2"
+              >
+                <span class="material-symbols-rounded fs-5">filter_list</span>
+                <span class="d-none d-md-inline small">Filter</span>
+              </button>
+
+              <button
+                class="btn btn-primary shadow-sm px-4 d-flex align-items-center gap-2 fw-bold"
+              >
+                <span class="material-symbols-rounded fs-5">add</span>
+                <span class="d-none d-md-inline small">Add Product</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-1 shadow-md rounded-4 overflow-hidden">
+          <div class="table-responsive">
+            <table class="table align-middle mb-0 custom-table">
+              <thead>
+                <tr>
+                  <th class="ps-4">PRODUCT</th>
+                  <th>CATEGORY</th>
+                  <th>PRICE</th>
+                  <th>STOCK</th>
+                  <th class="text-end pe-">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center gap-3">
+                      <img
+                        src="https://via.placeholder.com/48"
+                        class="rounded-3 border shadow-sm"
+                        alt="product"
+                      />
+                      <span class="fw-bold text-dark"
+                        >Wireless Headphones Ultra</span
+                      >
+                    </div>
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-primary-subtle text-primary border-0 px-3 py-2 rounded-pill small"
+                      >Electronics</span
+                    >
+                  </td>
+                  <td class="fw-bold">$249.00</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="dot bg-success me-1"></span>
+                      <span class="text-muted">124</span>
+                    </div>
+                  </td>
+                  <td class="text-end pe-4">
+                    <button class="btn btn-action text-primary">
+                      <span class="material-symbols-rounded">edit</span>
+                    </button>
+                    <button class="btn btn-action text-danger">
+                      <span class="material-symbols-rounded">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div
+              class="card-footer custom-footer border-top-0 p-3 d-flex justify-content-between align-items-center"
+            >
+              <span class="text-muted small ps-2"
+                >Showing 1 to 2 of 48 entries</span
+              >
+              <nav>
+                <ul class="pagination pagination-sm mb-0 gap-1 pe-2">
+                  <li class="page-item">
+                    <a class="page-link border-0 text-muted" href="#"
+                      ><span class="material-symbols-rounded fs-5"
+                        >chevron_left</span
+                      ></a
+                    >
+                  </li>
+                  <li class="page-item active">
+                    <a class="page-link border-0 rounded-3 shadow-sm" href="#"
+                      >1</a
+                    >
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link border-0 text-dark rounded-3" href="#"
+                      >2</a
+                    >
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link border-0 text-dark rounded-3" href="#"
+                      >3</a
+                    >
+                  </li>
+                  <li class="page-item disabled">
+                    <span class="page-link border-0 text-muted">...</span>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link border-0 text-dark rounded-3" href="#"
+                      >10</a
+                    >
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link border-0 text-muted" href="#"
+                      ><span class="material-symbols-rounded fs-5"
+                        >chevron_right</span
+                      ></a
+                    >
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
       </section>
+      <!-- / product section -->
 
       <section id="categories" class="content-section d-none">
         <h2 class="fw-bold mb-4">Categories</h2>
