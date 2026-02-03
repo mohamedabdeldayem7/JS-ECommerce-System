@@ -285,8 +285,8 @@
                   <th style="width: 15%" class="text-end">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
+              <tbody id="productBody">
+                <!-- <tr>
                   <td class="ps-4">
                     <div class="d-flex align-items-center gap-2 gap-md-3">
                       <img
@@ -375,7 +375,7 @@
                       </button>
                     </div>
                   </td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </div>
@@ -466,6 +466,8 @@
                     id="prodPrice"
                     required
                     placeholder="0.00"
+                    step="0.01"
+                    min="0"
                   />
                 </div>
               </div>
@@ -474,11 +476,10 @@
                 <label class="form-label small fw-bold text-secondary"
                   >Category</label
                 >
-                <select class="form-select rounded-3 p-2" id="prodCategory">
-                  <option value="Electronics">Electronics</option>
-                  <option value="Accessories">Accessories</option>
-                  <option value="Clothing">Clothing</option>
-                </select>
+                <select
+                  class="form-select rounded-3 p-2"
+                  id="prodCategory"
+                ></select>
               </div>
 
               <div class="mb-3">
@@ -488,7 +489,7 @@
                 <input
                   type="url"
                   class="form-control rounded-3 p-2"
-                  id="Pimage"
+                  id="pImage"
                   required
                   placeholder="inter Product Image Url"
                 />
@@ -500,7 +501,7 @@
                 >
                 <textarea
                   class="form-control rounded-3 p-2"
-                  id="Pimage"
+                  id="pDes"
                   required
                   placeholder="You can describe product here"
                 ></textarea>
@@ -532,6 +533,10 @@
     <!-- / end modals -->
     <!-- script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../src/modules/admin/dashboard.js"></script>
+    <script type="module" src="../../src/modules/admin/dashboard.js"></script>
+    <script
+      type="module"
+      src="../../src/modules/admin/product-crud.js"
+    ></script>
   </body>
 </html>
