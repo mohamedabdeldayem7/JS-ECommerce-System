@@ -262,6 +262,20 @@ body {
 /* end Pagination */
 /* end table */
 /* end product section style */
+/* start Categories section style */
+/* Description Text Limiter */
+.description-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  max-width: 500px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+/* end Categories section style */
 /* end section style */
 
 /* end main section style */
