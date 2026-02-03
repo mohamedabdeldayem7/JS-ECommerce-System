@@ -1,11 +1,79 @@
 import StorageManager from "../../utils/storage/storage-helper.js";
+import { getAllCategories } from "./category-crud.js";
 import Product from "./Product.js";
 
 const storageManager = new StorageManager();
 
+// get all products
+export function getAllProducts() {
+  return toProductList(storageManager.get("products"));
+}
+
+// function to get a product by ID
+export function getProductById(id) {
+  return getAllProducts().find((p) => p.id === id);
+}
+
+export function saveProduct(product) {
+  const products = getAllProducts();
+
+  if (getProductById(product.id)) {
+    products.forEach((p) => {
+      if (p.id === product.id) {
+        p.name = product.name;
+        p.description = product.description;
+        p.categoryId = product.categoryId;
+        p.image = product.image;
+        p.price = product.price;
+        p.stockQuantity = product.stockQuantity;
+      }
+    });
+  } else {
+    products.push(product);
+  }
+
+  storageManager.set("products", products);
+  renderTable(products);
+}
+// end save function
+// function to delete
+export function deleteProduct(id) {
+  if (confirm("Are you sure you want to delete this product?")) {
+    const newProducts = getAllProducts().filter((p) => p.id !== id);
+    storageManager.set("products", newProducts);
+    renderTable(newProducts);
+  }
+}
+
+// window.onload = function () {
+//   const data = storageManager.get("products");
+//   renderTable(toProductList(data));
+// };
+
+function toProductList(data) {
+  //   console.log(data);
+
+  if (Array.isArray(data)) {
+    console.log("OK");
+
+    return data.map(
+      (p) =>
+        new Product(
+          p.name,
+          p.description,
+          p.categoryId,
+          p.image,
+          p.price,
+          p.stockQuantity,
+          p.id,
+        ),
+    );
+  }
+}
+
 // function to write products in table
 export function renderTable(products) {
-  const categories = storageManager.get("categories");
+  const categories = getAllCategories();
   if (Array.isArray(products)) {
     const isAllProducts = products.every((p) => p instanceof Product);
     const productBody = document.getElementById("productBody");
@@ -72,70 +140,5 @@ export function renderTable(products) {
     }
   } else {
     console.log("cannot complete writing..");
-  }
-}
-
-// get all products
-export function getAllProducts() {
-  return toProductList(storageManager.get("products"));
-}
-
-// function to get a product by ID
-export function getProductById(id) {
-  return getAllProducts().find((p) => p.id === id);
-}
-
-export function saveProduct(product) {
-  const products = getAllProducts();
-
-  if (getProductById(product.id)) {
-    products.forEach((p) => {
-      if (p.id === product.id) {
-        p.name = product.name;
-        p.description = product.description;
-        p.categoryId = product.categoryId;
-        p.image = product.image;
-        p.price = product.price;
-        p.stockQuantity = product.stockQuantity;
-      }
-    });
-  } else {
-    products.push(product);
-  }
-
-  storageManager.set("products", products);
-  renderTable(products);
-}
-// end save function
-// function to delete
-export function deleteProduct(id) {
-  const newProducts = getAllProducts().filter((p) => p.id !== id);
-  storageManager.set("products", newProducts);
-  renderTable(newProducts);
-}
-
-// window.onload = function () {
-//   const data = storageManager.get("products");
-//   renderTable(toProductList(data));
-// };
-
-function toProductList(data) {
-  //   console.log(data);
-
-  if (Array.isArray(data)) {
-    console.log("OK");
-
-    return data.map(
-      (p) =>
-        new Product(
-          p.name,
-          p.description,
-          p.categoryId,
-          p.image,
-          p.price,
-          p.stockQuantity,
-          p.id,
-        ),
-    );
   }
 }
