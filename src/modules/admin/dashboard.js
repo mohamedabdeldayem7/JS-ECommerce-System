@@ -1,3 +1,14 @@
+//imports
+import Product from "./Product.js";
+import {
+  getProductById,
+  saveProduct,
+  deleteProduct,
+  getAllProducts,
+  renderTable,
+} from "./product-crud.js";
+import { getAllCategories, getCategoryById } from "./category-crud.js";
+
 // sidebar
 
 // activate background color with low opacity under sidebar
@@ -30,54 +41,163 @@ document.querySelectorAll(".sidebar .nav-link[data-target]").forEach((link) => {
   });
 });
 
-// open product modal
-
-let products = [
-  {
-    id: "P-8821",
-    name: "Wireless Headphones Ultra",
-    category: "Electronics",
-    price: 249.0,
-    stock: 124,
-    status: "Active",
-  },
-  {
-    id: "P-8822",
-    name: "Full Grain Leather Wallet",
-    category: "Accessories",
-    price: 85.0,
-    stock: 8,
-    status: "Low Stock",
-  },
-];
-const productModal = new bootstrap.Modal(
-  document.getElementById("productModal"),
-);
+// for product modal
+const modalEl = document.getElementById("productModal");
+const productModal = new bootstrap.Modal(modalEl);
 const productForm = document.getElementById("productForm");
 
-// on add product btn
-function openAddModal() {
-  document.getElementById("modalTitle").innerText = "Add New Product";
-  document.getElementById("saveBtn").innerText = "Save Product";
-  document.getElementById("editProductId").value = "";
+// for add new
+window.openAddModal = function () {
   productForm.reset();
+  document.getElementById("editProductId").value = "";
+  document.getElementById("modalTitle").innerText = "Add New Product";
+  const prodCategory = document.getElementById("prodCategory");
+
+  prodCategory.innerHTML = "";
+
+  getAllCategories().forEach((c) => {
+    prodCategory.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+  });
   productModal.show();
-}
+};
 
-// on edit product btn
-function openEditModal(id) {
-  const product = products.find((p) => p.id === id);
-
-  if (product) {
+// for edit
+window.openEditModal = function (id) {
+  const p = getProductById(id);
+  if (p) {
     document.getElementById("modalTitle").innerText = "Edit Product";
-    document.getElementById("saveBtn").innerText = "Update Changes";
+    document.getElementById("editProductId").value = p.id;
+    document.getElementById("prodName").value = p.name;
+    document.getElementById("prodPrice").value = p.price;
+    document.getElementById("prodStock").value = p.stockQuantity;
+    document.getElementById("pImage").value = p.image;
+    document.getElementById("pDes").value = p.description;
+    const prodCategory = document.getElementById("prodCategory");
 
-    document.getElementById("editProductId").value = product.id;
-    document.getElementById("prodName").value = product.name;
-    document.getElementById("prodCategory").value = product.category;
-    document.getElementById("prodPrice").value = product.price;
-    document.getElementById("prodStock").value = product.stock;
+    const categories = getAllCategories();
+    console.log("cat from openEditModal", categories);
 
+    const activeCatName = categories.find((c) => c.id == p.categoryId).name;
+
+    prodCategory.innerHTML = "";
+    prodCategory.innerHTML += `<option value="${activeCatName}">${activeCatName}</option>`;
+
+    categories.forEach((c) => {
+      if (c.id !== p.categoryId)
+        prodCategory.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+    });
     productModal.show();
   }
+};
+
+// submit product form
+productForm.onsubmit = function (e) {
+  e.preventDefault();
+
+  const idInput = parseInt(document.getElementById("editProductId").value);
+  const nameInput = document.getElementById("prodName").value;
+  const priceInput = parseFloat(document.getElementById("prodPrice").value);
+  const stockInput = parseInt(document.getElementById("prodStock").value);
+  const imageInput = document.getElementById("pImage").value;
+  const descriptionInput = document.getElementById("pDes").value;
+  const prodCategory = document.getElementById("prodCategory");
+
+  const category = getAllCategories().find(
+    (c) => c.name === prodCategory.value,
+  );
+
+  console.log("price from modal", typeof priceInput);
+
+  let product;
+
+  if (idInput) {
+    product = new Product(
+      nameInput,
+      descriptionInput,
+      category.id,
+      imageInput,
+      priceInput,
+      stockInput,
+      idInput,
+    );
+  } else {
+    product = new Product(
+      nameInput,
+      descriptionInput,
+      category.id,
+      imageInput,
+      priceInput,
+      stockInput,
+    );
+  }
+  saveProduct(product);
+  productModal.hide();
+};
+
+// on delete clicked
+window.deleteProduct = function (id) {
+  deleteProduct(id);
+};
+
+// configure pagination
+let currentPage = 1;
+const rowsPerPage = 5;
+
+function renderPagination(totalItems) {
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
+  const container = document.getElementById("paginationContainer");
+  container.innerHTML = "";
+
+  // Previous Button
+  const prevDisabled = currentPage === 1 ? "disabled" : "";
+  container.innerHTML += `
+        <li class="page-item ${prevDisabled}">
+            <a class="page-link" href="javascript:void(0)" onclick="changePage(${currentPage - 1})">&laquo;</a>
+        </li>`;
+
+  // pages numbers
+  for (let i = 1; i <= totalPages; i++) {
+    const activeClass = i === currentPage ? "active" : "";
+    container.innerHTML += `
+            <li class="page-item ${activeClass}">
+                <a class="page-link" href="javascript:void(0)" onclick="changePage(${i})">${i}</a>
+            </li>`;
+  }
+
+  // Next Button
+  const nextDisabled = currentPage === totalPages ? "disabled" : "";
+  container.innerHTML += `
+        <li class="page-item ${nextDisabled}">
+            <a class="page-link" href="javascript:void(0)" onclick="changePage(${currentPage + 1})">&raquo;</a>
+        </li>`;
 }
+
+// to change page
+window.changePage = function (page) {
+  const products = getAllProducts();
+  const totalPages = Math.ceil(products.length / rowsPerPage);
+
+  if (page < 1 || page > totalPages) return;
+
+  currentPage = page;
+
+  // start and end index to slice from products list for each page
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedItems = products.slice(start, end);
+
+  renderTable(paginatedItems);
+  renderPagination(products.length);
+  updatePaginationInfo(
+    start + 1,
+    Math.min(end, products.length),
+    products.length,
+  );
+};
+
+function updatePaginationInfo(start, end, total) {
+  document.getElementById("paginationInfo").innerText =
+    `Showing ${start} to ${end} of ${total} entries`;
+}
+
+changePage(1);
