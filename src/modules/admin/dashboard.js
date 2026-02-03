@@ -7,7 +7,14 @@ import {
   getAllProducts,
   renderTable,
 } from "./product-crud.js";
-import { getAllCategories, getCategoryById } from "./category-crud.js";
+import {
+  saveCategory,
+  getAllCategories,
+  getCategoryById,
+  deleteCategory,
+  renderCategoriesTable,
+} from "./category-crud.js";
+import Category from "./Category.js";
 
 // sidebar
 
@@ -201,3 +208,55 @@ function updatePaginationInfo(start, end, total) {
 }
 
 changePage(1);
+
+// Categories
+// for Categories modal
+const modalElelment = document.getElementById("categoryModal");
+const categoryModal = new bootstrap.Modal(modalElelment);
+const categoryForm = document.getElementById("categoryForm");
+
+// for add new
+window.openAddCategoryModal = function () {
+  productForm.reset();
+  document.getElementById("editCategoryId").value = "";
+  document.getElementById("catModalTitle").innerText = "Add New Category";
+  categoryModal.show();
+};
+
+// for edit
+window.openEditCategoryModal = function (id) {
+  const p = getCategoryById(id);
+  if (p) {
+    document.getElementById("modalTitle").innerText = "Edit Category";
+    document.getElementById("editCategoryId").value = p.id;
+    document.getElementById("catName").value = p.name;
+    document.getElementById("catDesc").value = p.description;
+
+    categoryModal.show();
+  }
+};
+
+// submit product form
+categoryForm.onsubmit = function (e) {
+  e.preventDefault();
+
+  const idInput = parseInt(document.getElementById("editCategoryId").value);
+  const nameInput = document.getElementById("catName").value;
+  const descriptionInput = document.getElementById("catDesc").value;
+
+  let category;
+
+  if (idInput) {
+    category = new Category(nameInput, descriptionInput, idInput);
+  } else {
+    category = new Category(nameInput, descriptionInput);
+  }
+  saveCategory(category);
+  categoryModal.hide();
+};
+
+window.deleteCategory = function (id) {
+  deleteCategory(id);
+};
+
+renderCategoriesTable();
