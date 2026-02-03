@@ -19,13 +19,13 @@ import Category from "./Category.js";
 // sidebar
 
 // activate background color with low opacity under sidebar
-function toggleSidebar() {
+window.toggleSidebar = function () {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
 
   sidebar.classList.toggle("active");
   overlay.classList.toggle("active");
-}
+};
 
 document.querySelectorAll(".sidebar .nav-link[data-target]").forEach((link) => {
   link.addEventListener("click", function (e) {
@@ -115,7 +115,8 @@ productForm.onsubmit = function (e) {
 
   console.log("price from modal", typeof priceInput);
 
-  let product;
+  let product,
+    flag = true;
 
   if (idInput) {
     product = new Product(
@@ -127,6 +128,7 @@ productForm.onsubmit = function (e) {
       stockInput,
       idInput,
     );
+    flag = false;
   } else {
     product = new Product(
       nameInput,
@@ -138,12 +140,16 @@ productForm.onsubmit = function (e) {
     );
   }
   saveProduct(product);
+  let alertMsg = flag ? "added" : "modified";
+  alert(`Product with name "${product.name}" ${alertMsg} successfully`);
   productModal.hide();
+  changePage(1);
 };
 
 // on delete clicked
 window.deleteProduct = function (id) {
   deleteProduct(id);
+  changePage(1);
 };
 
 // configure pagination
@@ -217,7 +223,7 @@ const categoryForm = document.getElementById("categoryForm");
 
 // for add new
 window.openAddCategoryModal = function () {
-  productForm.reset();
+  categoryForm.reset();
   document.getElementById("editCategoryId").value = "";
   document.getElementById("catModalTitle").innerText = "Add New Category";
   categoryModal.show();
@@ -244,15 +250,19 @@ categoryForm.onsubmit = function (e) {
   const nameInput = document.getElementById("catName").value;
   const descriptionInput = document.getElementById("catDesc").value;
 
-  let category;
+  let category,
+    flag = true;
 
   if (idInput) {
     category = new Category(nameInput, descriptionInput, idInput);
+    flag = false;
   } else {
     category = new Category(nameInput, descriptionInput);
   }
   saveCategory(category);
   categoryModal.hide();
+  let alertMsg = flag ? "added" : "modified";
+  alert(`Category with name "${category.name}" ${alertMsg} successfully`);
 };
 
 window.deleteCategory = function (id) {
@@ -260,3 +270,30 @@ window.deleteCategory = function (id) {
 };
 
 renderCategoriesTable();
+
+setInterval(() => {
+  document.getElementById("totalProd").textContent = getAllProducts().length;
+  document.getElementById("lowStockProd").textContent = getAllProducts().filter(
+    (p) => p.getStockQuantity < 140,
+  ).length;
+}, 10);
+
+window.showToast = function (message, type = "success") {
+  const toastEl = document.getElementById("liveToast");
+  const toastMsg = document.getElementById("toastMessage");
+
+  // تحديد اللون بناءً على النوع
+  const colors = {
+    success: "bg-success",
+    danger: "bg-danger",
+    warning: "bg-warning",
+    info: "bg-primary",
+  };
+
+  // إزالة أي كلاسات قديمة وإضافة الجديدة
+  toastEl.className = `toast align-items-center text-white border-0 ${colors[type]}`;
+  toastMsg.innerText = message;
+
+  const toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // تختفي بعد 3 ثواني
+  toast.show();
+};

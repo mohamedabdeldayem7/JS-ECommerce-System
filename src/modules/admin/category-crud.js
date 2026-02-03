@@ -58,7 +58,6 @@ function toCategoryList(data) {
   //   console.log(data);
 
   if (Array.isArray(data)) {
-    console.log("from cat-crud", data);
     return data.map((c) => new Category(c.name, c.description, c.id));
   }
 }
