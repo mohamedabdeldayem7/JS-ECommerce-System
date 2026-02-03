@@ -1,4 +1,5 @@
 /* Sidebar style */
+
 body {
   font-family: var(--bs-body-font-family);
 }
@@ -91,11 +92,43 @@ body {
   background-color: var(--surface-white);
   border-radius: var(--bs-border-radius);
   box-shadow: var(--shadow-md);
-  /* transition: transform 5s ease; */
 }
 
+/* ----------eidet card------------------ */
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0; 
+    width: 5px; 
+    height: 100%;
+    z-index: 1;
+}
+
+/* الأخضر (Sales) */
+.stat-card.type-success::before {
+    background-color: #198754; 
+}
+
+/* الأزرق (Orders) */
+.stat-card.type-primary::before {
+    background-color: #0d6efd; 
+}
+
+/* السماوي (Products) */
+.stat-card.type-info::before {
+    background-color: #0dcaf0; 
+}
+
+/* الأحمر (Low Stock) */
+.stat-card.type-danger::before {
+    background-color: #dc3545; 
+}
+/* end eidte */
+
 .stat-card:hover {
-  transform: translateY(5px);
+  transform: translateY(5px) !important;
   box-shadow: var(--shadow-lg);
 }
 
