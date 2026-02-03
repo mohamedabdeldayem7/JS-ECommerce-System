@@ -3,7 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Home</title>
+    
+    <link rel="stylesheet" href="src/assets/css/global/reset.css" />
+    <link rel="stylesheet" href="src/assets/css/global/variables.css" />
+    <link rel="stylesheet" href="src/assets/css/global/global.css" />
+    <link rel="stylesheet" href="src/assets/css/global/navbar.css" />
+    <link rel="stylesheet" href="src/assets/css/global/footer.css" />
+    <link rel="stylesheet" href="src/assets/css/customer/filter.css" />
+    <link rel="stylesheet" href="src/assets/css/customer/home.css" />
   </head>
-  <body></body>
+  <body>
+
+    <script type="module" src="src/utils/storage/dummyData.js"></script>
+    <nav class="navbar" id="navbar-container"></nav>
+
+    <main class="main-content">
+      <div class="container-fluid">
+        <div class="content-layout">
+          <aside class="filter-sidebar" id="filter-sidebar">
+          </aside>
+
+          <section class="products-section">
+            <div class="category-header">
+              <div>
+                <h1 class="category-title" id="category-title">All Products</h1>
+                <p class="category-description" id="category-description">
+                  Browse our latest collection of our products.
+                </p>
+              </div>
+              <div class="sort-controls">
+                <label for="sort-select">Sort by:</label>
+                <select id="sort-select" class="sort-select">
+                  <option value="popular">Most Popular</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="name">Name: A to Z</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="products-grid" id="products-container">
+              <div class="loading">Loading products...</div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+              <p>No products found matching your filters</p>
+            </div>
+
+            
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer" id="footer-container">
+    </footer>
+
+    <script type="module" src="src/modules/customer/home-logic.js"></script>
+  </body>
 </html>
