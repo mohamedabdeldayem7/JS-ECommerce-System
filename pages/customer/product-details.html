@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details</title>
+    
+    <link rel="stylesheet" href="../../src/assets/css/global/reset.css" />
+    <link rel="stylesheet" href="../../src/assets/css/global/variables.css" />
+    <link rel="stylesheet" href="../../src/assets/css/global/global.css" />
+    <link rel="stylesheet" href="../../src/assets/css/global/navbar.css" />
+    <link rel="stylesheet" href="../../src/assets/css/global/footer.css" />
+    <link rel="stylesheet" href="../../src/assets/css/customer/product-details.css" />
+  </head>
+  <body>
+
+    <nav class="navbar" id="navbar-container"></nav>
+
+    <main class="main-content">
+      <div class="container-fluid">
+        
+        <div class="product-details-container">
+          <div class="product-image-section">
+            <img id="product-image" src="" alt="Product" class="product-detail-image" />
+          </div>
+
+          <div class="product-info-section">
+            <div class="product-category-badge" id="product-category"></div>
+            <h1 class="product-detail-title" id="product-title"></h1>
+            
+            <div class="product-price-rating">
+              <div class="product-detail-price" id="product-price"></div>
+              <div class="product-rating">
+                <span class="rating-star">⭐</span>
+                <span class="rating-value" id="product-rating">4.8</span>
+                <span class="rating-count" id="rating-count">(264 reviews)</span>
+              </div>
+            </div>
+
+            <p class="product-detail-description" id="product-description"></p>
+
+            <div class="product-stock" id="product-stock"></div>
+
+            <div class="product-actions">
+              <button class="btn-add-cart-detail" id="btn-add-cart">
+                <span>🛒</span>
+                Add to Cart
+              </button>
+              <button class="btn-wishlist-detail" id="btn-wishlist">
+                <span id="wishlist-icon">🤍</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <section class="related-products-section">
+          <div class="section-header">
+            <h2>Related Products</h2>
+            <a href="../../index.html" class="view-all-link">View All →</a>
+          </div>
+          <div class="related-products-grid" id="related-products"></div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="footer" id="footer-container"></footer>
+
+    <script type="module" src="../../src/modules/customer/product-details-logic.js"></script>
+  </body>
+</html>

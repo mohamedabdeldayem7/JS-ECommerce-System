@@ -7,6 +7,7 @@ export class Product {
     image,
     price,
     stockQuantity,
+    features = [],
   ) {
     // validation need in each field
     this.id = id;
@@ -16,6 +17,7 @@ export class Product {
     this.setImage = image;
     this.setPrice = price;
     this.setStockQuantity = stockQuantity;
+    this.setFeatures = features;
   }
 
   // ID
@@ -76,6 +78,14 @@ export class Product {
     if (!Number.isInteger(value) || value < 0)
       throw new Error("Stock must be a non-negative integer.");
     this.stockQuantity = value;
+  }
+
+  // Features
+  get getFeatures() {
+    return this.features;
+  }
+  set setFeatures(value) {
+    this.features = Array.isArray(value) ? value : [];
   }
 }
 
