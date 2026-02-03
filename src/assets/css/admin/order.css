@@ -1,0 +1,77 @@
+.orders-top-row {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+}
+
+.filter-btn {
+  border: none;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: #374151;
+}
+
+
+.content-section {
+  margin: 10px;
+}
+.custom-table th {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #42464d;
+  padding: 16px 16px;
+}
+
+
+/* لون الصفوف أبيض */
+.custom-table tbody tr {
+  background-color: white !important;
+  font-size: 14px;
+}
+
+/* لون الخلايا أبيض */
+.custom-table tbody td {
+  background-color: white !important;
+}
+
+.filter-btn:hover{
+  color: var(--bs-primary) !important;
+  background-color:var(--border-color) !important;
+  
+}
+
+.status-badge {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.orders-toggle-group {
+  display: inline-flex;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px; /* يخليها بيضاوية زي الصورة */
+ background-color: var(--bs-body-bg) !important;
+  padding: 4px; /* مسافة داخلية صغيرة */
+}
+
+.orders-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+   /* background:#eef2ff; 👈 الصف كله أبيض */
+  border-radius: 5px;
+  border: 1px solid #e2e8f0; /* نفس حدود الكروت */
+}
+
+.order-btn-sm {
+  padding: 4px 9px;
+  font-size: 14px;
+  
+}
+
+
+
+/* end order */
