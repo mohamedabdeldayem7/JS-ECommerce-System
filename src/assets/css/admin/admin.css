@@ -96,34 +96,34 @@ body {
 
 /* ----------eidet card------------------ */
 .stat-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0; 
-    width: 5px; 
-    height: 100%;
-    z-index: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 5px;
+  height: 100%;
+  z-index: 1;
 }
 
 /* الأخضر (Sales) */
 .stat-card.type-success::before {
-    background-color: #198754; 
+  background-color: #198754;
 }
 
 /* الأزرق (Orders) */
 .stat-card.type-primary::before {
-    background-color: #0d6efd; 
+  background-color: #0d6efd;
 }
 
 /* السماوي (Products) */
 .stat-card.type-info::before {
-    background-color: #0dcaf0; 
+  background-color: #0dcaf0;
 }
 
 /* الأحمر (Low Stock) */
 .stat-card.type-danger::before {
-    background-color: #dc3545; 
+  background-color: #dc3545;
 }
 /* end eidte */
 
@@ -222,7 +222,7 @@ body {
 }
 
 .custom-table tbody tr:hover td {
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: rgba(0, 0, 0, 0.02) !important;
 }
 
 .custom-table tbody tr:hover > :first-child {

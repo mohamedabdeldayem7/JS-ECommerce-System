@@ -1,3 +1,15 @@
+//imports
+import Product from "./Product.js";
+import {
+  getProductById,
+  saveProduct,
+  deleteProduct,
+  getAllProducts,
+  renderTable,
+} from "./product-crud.js";
+import StorageManager from "./../../utils/storage/storage-helper.js";
+
+const storageManager = new StorageManager();
 document.addEventListener("DOMContentLoaded", () => {
   renderPendingOrders("oldest");
   updateOrdersCount();
@@ -99,36 +111,36 @@ function renderPendingOrders(sortType = "oldest") {
       </tr>
     `;
   });
-  
 }
 document.getElementById("sortOrders").addEventListener("change", function () {
   renderPendingOrders(this.value);
 });
 
-function confirmOrder(orderId) {
+window.confirmOrder = function (orderId) {
   updateOrderStatus(orderId, "confirmed");
-}
-function rejectOrder(orderId) {
+};
+window.rejectOrder = function (orderId) {
   updateOrderStatus(orderId, "rejected");
-}
+};
 function updateOrderStatus(orderId, newStatus) {
-    let orders = getOrders();
+  let orders = getOrders();
 
-    orders = orders.map((order) => {
-        if (order.id === orderId) {
-            return { ...order, status: newStatus };
-        }
-        return order;
-    });
+  orders = orders.map((order) => {
+    if (order.id === orderId) {
+      return { ...order, status: newStatus };
+    }
+    return order;
+  });
 
-    localStorage.setItem("orders", JSON.stringify(orders));
+  // storageManager.set("orders", orders);
+  localStorage.setItem("orders", JSON.stringify(orders));
 
-    // 1. إزالة الصف من الجدول (كما فعلت أنت)
-    const row = document.getElementById(`row-${orderId}`);
-    if (row) row.remove();
+  // 1. إزالة الصف من الجدول (كما فعلت أنت)
+  const row = document.getElementById(`row-${orderId}`);
+  if (row) row.remove();
 
-    // 2. تحديث العدادات فوراً بعد تغيير الحالة
-    updateOrdersCount();
+  // 2. تحديث العدادات فوراً بعد تغيير الحالة
+  updateOrdersCount();
 }
 function showToast(message, type) {
   const toast = document.getElementById("toast");
@@ -148,69 +160,87 @@ function showToast(message, type) {
   }, 2500);
 }
 
+window.confirmOrder = function (orderId) {
+  // 1. جلب كل الطلبات وكل المنتجات من الـ LocalStorage
+  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const products = JSON.parse(localStorage.getItem("products")) || [];
 
-function confirmOrder(orderId) {
-    // 1. جلب كل الطلبات وكل المنتجات من الـ LocalStorage
-    const orders = JSON.parse(localStorage.getItem("orders")) || [];
-    const products = JSON.parse(localStorage.getItem("products")) || [];
+  // 2. البحث عن الطلب الحالي
+  const orderIndex = orders.findIndex((o) => o.id === orderId);
 
-    // 2. البحث عن الطلب الحالي
-    const orderIndex = orders.findIndex(o => o.id === orderId);
+  if (orderIndex !== -1) {
+    const currentOrder = orders[orderIndex];
 
-    if (orderIndex !== -1) {
-        const currentOrder = orders[orderIndex];
+    // 3. منطق خصم المخزون (تعديل مصفوفة المنتجات مباشرة هنا)
+    currentOrder.items.forEach((orderItem) => {
+      // البحث عن المنتج المطابق في مصفوفة المنتجات
+      const productInStock = products.find((p) => p.id === orderItem.productId);
 
-        // 3. منطق خصم المخزون (تعديل مصفوفة المنتجات مباشرة هنا)
-        currentOrder.items.forEach(orderItem => {
-            // البحث عن المنتج المطابق في مصفوفة المنتجات
-            const productInStock = products.find(p => p.id === orderItem.productId);
-            
-            if (productInStock) {
-                // خصم الكمية
-                productInStock.stockQuantity -= orderItem.quantity;
-            }
-        });
+      if (productInStock) {
+        // خصم الكمية
+        productInStock.stockQuantity -= orderItem.quantity;
+      }
+    });
 
-        // 4. تحديث حالة الطلب إلى confirmed
-        orders[orderIndex].status = "confirmed";
+    // 4. تحديث حالة الطلب إلى confirmed
+    orders[orderIndex].status = "confirmed";
 
-        // 5. حفظ كل شيء مرة واحدة في الـ LocalStorage
-        localStorage.setItem("orders", JSON.stringify(orders));
-        localStorage.setItem("products", JSON.stringify(products));
+    // 5. حفظ كل شيء مرة واحدة في الـ LocalStorage
+    localStorage.setItem("orders", JSON.stringify(orders));
+    localStorage.setItem("products", JSON.stringify(products));
 
-        // 6. تحديث الواجهة
-        const row = document.getElementById(`row-${orderId}`);
-        if (row) row.remove(); // إخفاء الصف من جدول الطلبات المنتظرة
-        
-        updateOrdersCount(); // تحديث العداد في السايد بار
-        showToast("تم التأكيد وخصم المخزون بنجاح ✅", "success");
-    }
-}
+    // 6. تحديث الواجهة
+    const row = document.getElementById(`row-${orderId}`);
+    if (row) row.remove(); // إخفاء الصف من جدول الطلبات المنتظرة
 
-function rejectOrder(orderId) {
+    updateOrdersCount(); // تحديث العداد في السايد بار
+    showToast("تم التأكيد وخصم المخزون بنجاح ✅", "success");
+  }
+};
+
+window.rejectOrder = function (orderId) {
   updateOrderStatus(orderId, "rejected");
   showToast("Order Rejected ❌", "error");
-}
+};
 // -----------------------------------------
-// اظها عدد الاوردار ف ال cart و order اللي ف السايد بار 
+// اظها عدد الاوردار ف ال cart و order اللي ف السايد بار
 function updateOrdersCount() {
-    const orders = getOrders(); // استخدم الدالة اللي انت معرفها فوق
+  const orders = getOrders(); // استخدم الدالة اللي انت معرفها فوق
 
-    // فلترة الأوردرات اللي حالتها pending فقط
-    const pendingOrders = orders.filter(order => order.status === "pending");
-    const count = pendingOrders.length;
+  // فلترة الأوردرات اللي حالتها pending فقط
+  const pendingOrders = orders.filter((order) => order.status === "pending");
+  const count = pendingOrders.length;
 
-    // تحديث الرقم في الكارد الرئيسي
-    const totalOrdersElement = document.getElementById('total-orders-count');
-    if (totalOrdersElement) {
-        totalOrdersElement.innerText = count.toLocaleString();
-    }
+  // تحديث الرقم في الكارد الرئيسي
+  const totalOrdersElement = document.getElementById("total-orders-count");
+  if (totalOrdersElement) {
+    totalOrdersElement.innerText = count.toLocaleString();
+  }
 
-    // تحديث الرقم في السايد بار
-    const sidebarBadge = document.getElementById('sidebar-orders-badge');
-    if (sidebarBadge) {
-        sidebarBadge.innerText = count;
-        sidebarBadge.style.display = count > 0 ? 'inline-block' : 'none';
-    }
+  // تحديث الرقم في السايد بار
+  const sidebarBadge = document.getElementById("sidebar-orders-badge");
+  if (sidebarBadge) {
+    sidebarBadge.innerText = count;
+    sidebarBadge.style.display = count > 0 ? "inline-block" : "none";
+  }
 }
 
+// to subtract items
+// const order = {
+//   customerId: 2,
+//   date: "2026-02-02",
+//   id: "o1770069661434",
+//   items: [
+//     { productId: 2, quantity: 2 },
+//     { productId: 2, quantity: 2 },
+//   ],
+//   status: "pending",
+//   total: 500,
+// };
+
+// order.items.forEach((it) => {
+//   const prod = getProductById(it.productId);
+//   if (prod.setStockQuantity >= it.quantity)
+//     prod.setStockQuantity -= it.quantity;
+//   else console.error("blablabla");
+// });
