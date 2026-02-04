@@ -297,3 +297,27 @@ window.showToast = function (message, type = "success") {
   const toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // تختفي بعد 3 ثواني
   toast.show();
 };
+///////
+document.addEventListener("DOMContentLoaded", () => {
+  const user = AuthService.checkAuth();
+
+  if (user) {
+    document.getElementById("adminName").textContent =
+      `${user.firstName} ${user.lastName}`;
+
+    document.getElementById("adminEmail").textContent = user.email;
+  } else {
+    AuthService.logout();
+  }
+
+  const logoutBtn = document.getElementById("logoutMe");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      if (confirm("Are you sure you want to logout?")) {
+        AuthService.logout();
+      }
+    });
+  }
+});
