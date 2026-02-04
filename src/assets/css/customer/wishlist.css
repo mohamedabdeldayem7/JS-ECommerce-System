@@ -1,0 +1,138 @@
+/* ===============================
+   HEADER
+================================ */
+.wishlist-header {
+  background: #fff;
+  padding: 24px 28px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===============================
+   CARD
+================================ */
+.wishlist-card {
+  border: none;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wishlist-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===============================
+   IMAGE
+================================ */
+.wishlist-img-wrapper {
+  position: relative;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.wishlist-img {
+  height: 200px;
+  width: 100%;
+  object-fit: contain;
+}
+
+/* ===============================
+   REMOVE BUTTON
+================================ */
+.remove-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: var(--bs-danger);
+}
+
+.remove-btn i {
+  color: var(--bs-danger);
+  transition: color 0.2s ease;
+}
+
+.remove-btn:hover i {
+  color: #fff;
+}
+
+/* ===============================
+   BODY
+================================ */
+.wishlist-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ===============================
+   TITLE (FIXED HEIGHT + HOVER)
+================================ */
+.wishlist-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;          /* أقصى سطرين */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  min-height: calc(1.4em * 2);    /* تثبيت الارتفاع */
+  cursor: default;
+}
+
+/* Tooltip طبيعي بالـ title attribute */
+.wishlist-title[title] {
+  position: relative;
+}
+
+/* ===============================
+   PRICE
+================================ */
+.wishlist-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--bs-primary);
+  margin-bottom: 14px;
+}
+
+/* ===============================
+   ACTION BUTTON
+================================ */
+.move-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ===============================
+   ICON
+================================ */
+.header-icon {
+  font-size: 50px;
+}
