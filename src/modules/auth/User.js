@@ -36,6 +36,7 @@ export class User {
   set password(value) {
     UserValidations.validatePassword(value);
     this._password = value;
+    console.log(value);
   }
   get password() {
     return this._password;

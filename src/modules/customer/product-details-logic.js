@@ -1,8 +1,22 @@
 import StorageManager from "../../utils/storage/storage-helper.js";
 import { Navbar } from "../../components/navbar.js";
 import { Footer } from "../../components/footer.js";
+import { saveCategoriesDummy, saveProductsDummy } from "../../utils/storage/dummyData.js";
+import KEYS from "../../utils/keys.js";
 
 const storage = new StorageManager();
+
+if (!storage.get("categories") || storage.get("categories").length === 0) {
+  saveCategoriesDummy();
+}
+if (!storage.get("products") || storage.get("products").length === 0) {
+  saveProductsDummy();
+}
+
+function getCurrentUserId() {
+  const userId = storage.getCookie(KEYS.CURRENT_USER);
+  return userId || "guest";
+}
 
 let allProducts = [];
 let allCategories = [];
@@ -32,7 +46,26 @@ function initializeFooter() {
 function loadData() {
   allProducts = storage.get("products") || [];
   allCategories = storage.get("categories") || [];
-  wishlist = storage.get("wishlist") || [];
+  
+  const userId = getCurrentUserId();
+  const wishlistKey = `wishlist_${userId}`;
+  const wishlistData = storage.get(wishlistKey) || { id: wishlistKey, usrID: userId, items: [] };
+  
+  if (wishlistData.items) {
+    wishlist = wishlistData.items.map(item => allProducts.find(p => p.id === item.pId)).filter(p => p);
+  } else {
+    wishlist = [];
+  }
+  
+  if (allProducts.length > 0 && allProducts[0].features && typeof allProducts[0].features === 'number') {
+    allProducts = allProducts.map((product) => {
+      const correctId = product.features;
+      product.id = correctId;
+      product.features = [];
+      return product;
+    });
+    storage.set("products", allProducts);
+  }
 }
 
 function getProductIdFromURL() {
@@ -62,7 +95,11 @@ function loadProduct() {
 function displayProduct(product) {
   const category = allCategories.find((cat) => cat.id === product.categoryId);
   const categoryName = category ? category.name : "Uncategorized";
-  const isInWishlist = wishlist.some((item) => item.id === product.id);
+  
+  const userId = getCurrentUserId();
+  const wishlistKey = `wishlist_${userId}`;
+  const wishlistData = storage.get(wishlistKey) || { items: [] };
+  const isInWishlist = wishlistData.items && wishlistData.items.some((item) => item.pId === product.id);
   const rating = (Math.random() * (5 - 4) + 4).toFixed(1);
 
   document.getElementById("product-image").src = product.image;
@@ -155,16 +192,23 @@ function createRelatedProductCard(product) {
 function addToCart(product) {
   if (product.stockQuantity === 0) return;
 
-  let cart = storage.get("cart") || [];
-  const existingItem = cart.find((item) => item.id === product.id);
-
-  if (existingItem) {
-    existingItem.quantity += 1;
-  } else {
-    cart.push({ ...product, quantity: 1 });
+  const userId = getCurrentUserId();
+  const cartKey = `cart_${userId}`;
+  let cart = storage.get(cartKey) || { id: cartKey, usrID: userId, items: [] };
+  
+  if (!cart.items) {
+    cart = { id: cartKey, usrID: userId, items: [] };
   }
 
-  storage.set("cart", cart);
+  const existingItem = cart.items.find((item) => item.pId === product.id);
+
+  if (existingItem) {
+    existingItem.qnt += 1;
+  } else {
+    cart.items.push({ pId: product.id, qnt: 1 });
+  }
+
+  storage.set(cartKey, cart);
   updateCartCount();
   alert("Added to cart!");
 }
@@ -173,21 +217,29 @@ function toggleWishlist(productId) {
   const product = allProducts.find((p) => p.id === productId);
   if (!product) return;
 
-  const existingIndex = wishlist.findIndex((item) => item.id === productId);
-
-  if (existingIndex !== -1) {
-    wishlist.splice(existingIndex, 1);
-    storage.set("wishlist", wishlist);
-  } else {
-    wishlist.push(product);
-    storage.set("wishlist", wishlist);
+  const userId = getCurrentUserId();
+  const wishlistKey = `wishlist_${userId}`;
+  let wishlistData = storage.get(wishlistKey) || { id: wishlistKey, usrID: userId, items: [] };
+  
+  if (!wishlistData.items) {
+    wishlistData = { id: wishlistKey, usrID: userId, items: [] };
   }
 
+  const existingIndex = wishlistData.items.findIndex((item) => item.pId === productId);
+
+  if (existingIndex !== -1) {
+    wishlistData.items.splice(existingIndex, 1);
+  } else {
+    wishlistData.items.push({ pId: productId, qnt: 1 });
+  }
+  
+  storage.set(wishlistKey, wishlistData);
+  wishlist = wishlistData.items.map(item => allProducts.find(p => p.id === item.pId)).filter(p => p);
   updateWishlistCount();
 
   const wishlistBtn = document.getElementById("btn-wishlist");
   const wishlistIcon = document.getElementById("wishlist-icon");
-  const isInWishlist = wishlist.some((item) => item.id === productId);
+  const isInWishlist = wishlistData.items.some((item) => item.pId === productId);
 
   if (isInWishlist) {
     wishlistBtn.classList.add("active");
@@ -199,7 +251,6 @@ function toggleWishlist(productId) {
 }
 
 function updateWishlistCount() {
-  wishlist = storage.get("wishlist") || [];
   const wishlistCountBadge = document.getElementById("wishlist-count");
   if (wishlistCountBadge) {
     wishlistCountBadge.textContent = wishlist.length;
@@ -207,8 +258,10 @@ function updateWishlistCount() {
 }
 
 function updateCartCount() {
-  const cart = storage.get("cart") || [];
-  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const userId = getCurrentUserId();
+  const cartKey = `cart_${userId}`;
+  const cart = storage.get(cartKey) || { items: [] };
+  const totalItems = cart.items ? cart.items.reduce((sum, item) => sum + (item.qnt || 0), 0) : 0;
   const cartCountBadge = document.getElementById("cart-count");
   if (cartCountBadge) {
     cartCountBadge.textContent = totalItems;

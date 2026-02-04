@@ -14,7 +14,7 @@ export class AuthService {
         "admin",
         "admin",
         "admin@gmail.com",
-        "admin@123",
+        "Admin@123",
         "admin",
       );
       users.push(admin);
@@ -36,14 +36,14 @@ export class AuthService {
   }
 
   static login(email, password) {
-    const users = AuthService.storageManager.get(KEYS.USERS);
+    const users = AuthService.storageManager.get(KEYS.USERS) || [];
 
     if (users.length < 1) {
       const admin = new User(
         "admin",
         "admin",
         "admin@gmail.com",
-        "admin@123",
+        "Admin@123",
         "admin",
       );
       users.push(admin);
