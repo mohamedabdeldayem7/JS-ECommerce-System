@@ -10,7 +10,7 @@ export class AuthService {
     const users = AuthService.storageManager.get(KEYS.USERS) || [];
 
     if (users.length < 1) {
-      const admin = new USer(
+      const admin = new User(
         "admin",
         "admin",
         "admin@gmail.com",
@@ -39,7 +39,7 @@ export class AuthService {
     const users = AuthService.storageManager.get(KEYS.USERS);
 
     if (users.length < 1) {
-      const admin = new USer(
+      const admin = new User(
         "admin",
         "admin",
         "admin@gmail.com",
