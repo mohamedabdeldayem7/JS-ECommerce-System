@@ -64,7 +64,9 @@ export class AuthService {
     return user;
   }
 
-  static logout() {}
+  static logout() {
+    AuthService.storageManager.eraseCookie(KEYS.CURRENT_USER);
+  }
   // auth function
   static checkAuth() {
     const user = AuthService.storageManager.getCookie(KEYS.CURRENT_USER);

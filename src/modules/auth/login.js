@@ -1,4 +1,5 @@
 // استيراد الخدمات اللازمة
+import KEYS from "../../utils/keys.js";
 import { AuthService } from "./auth-logic.js";
 
 const loginForm = document.getElementById("loginForm");
