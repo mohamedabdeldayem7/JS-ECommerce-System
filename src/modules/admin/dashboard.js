@@ -326,8 +326,14 @@ window.deleteCategory = function (id) {
 renderCategoriesTable();
 
 setInterval(() => {
-  document.getElementById("totalProd").textContent = getAllProducts().length;
-  document.getElementById("lowStockProd").textContent = getAllProducts().filter(
+  let inventoryValue = 0;
+  const products = getAllProducts();
+  products.forEach((p) => {
+    inventoryValue += p.getPrice * p.getStockQuantity;
+  });
+  document.getElementById("inventoryValue").textContent = inventoryValue;
+  document.getElementById("totalProd").textContent = products.length;
+  document.getElementById("lowStockProd").textContent = products.filter(
     (p) => p.getStockQuantity < 140,
   ).length;
 }, 10);
