@@ -18,45 +18,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ------------------------------------------------------------------------
 
-const sampleOrders = [
-  {
-    id: "o1770069661433",
-    customerId: 1,
-    items: [
-      { productId: "1", quantity: 1 },
-      { productId: "3", quantity: 1 },
-    ],
-    total: 1555.2,
-    status: "pending",
-    date: "2026-02-02",
-  },
-  {
-    id: "o1770069661434",
-    customerId: 2,
-    items: [{ productId: "2", quantity: 2 }],
-    total: 500.0,
-    status: "pending",
-    date: "2026-02-02",
-  },
-  {
-    id: "o1770069661435",
-    customerId: 3,
-    items: [{ productId: "4", quantity: 1 }],
-    total: 300.0,
-    status: "pending",
-    date: "2026-02-01",
-  },
-  {
-    id: "o1770069661436",
-    customerId: 4,
-    items: [{ productId: "1", quantity: 3 }],
-    total: 900.0,
-    status: "pending",
-    date: "2026-01-30",
-  },
-];
+// const sampleOrders = [
+//   {
+//     id: "o1770069661433",
+//     customerId: 1,
+//     items: [
+//       { productId: "1", quantity: 1 },
+//       { productId: "3", quantity: 1 },
+//     ],
+//     total: 1555.2,
+//     status: "pending",
+//     date: "2026-02-02",
+//   },
+//   {
+//     id: "o1770069661434",
+//     customerId: 2,
+//     items: [{ productId: "2", quantity: 2 }],
+//     total: 500.0,
+//     status: "pending",
+//     date: "2026-02-02",
+//   },
+//   {
+//     id: "o1770069661435",
+//     customerId: 3,
+//     items: [{ productId: "4", quantity: 1 }],
+//     total: 300.0,
+//     status: "pending",
+//     date: "2026-02-01",
+//   },
+//   {
+//     id: "o1770069661436",
+//     customerId: 4,
+//     items: [{ productId: "1", quantity: 3 }],
+//     total: 900.0,
+//     status: "pending",
+//     date: "2026-01-30",
+//   },
+// ];
 
-storageManager.set("orders",sampleOrders)
+// storageManager.set("orders",sampleOrders)
 // localStorage.setItem("orders", JSON.stringify(sampleOrders));
 
 // ----------------------------------------------------------------------------------
@@ -96,13 +96,13 @@ function renderOrders(filterType = "all", sortType = "oldest") {
       return a.total - b.total;
     }
     });
-
+//عرض البيانات ف الجدول
     const tableBody = document.getElementById("ordersTableBody");
     tableBody.innerHTML = ""; 
 
-    // 3. عرض البيانات في الجدول
+    
     filteredOrders.forEach((order) => {
-        // تحديد لون الـ Badge بناءً على الحالة
+      
         const statusClass = 
             order.status === "pending" ? "bg-warning text-dark" : 
             order.status === "confirmed" ? "bg-success text-white" : "bg-danger text-white";
@@ -127,7 +127,7 @@ function renderOrders(filterType = "all", sortType = "oldest") {
     });
 }
 document.getElementById("sortOrders").addEventListener("change", function () {
-  renderOrders("all", this.value); // 'all' للفلترة، this.value للترتيب
+  renderOrders("all", this.value);
 });
 
 
@@ -148,7 +148,7 @@ window.rejectOrder = function(orderId) {
         ord[index].status = "rejected";
         storageManager.set("orders", ord);
 
-        // تحديث الجدول مباشرة
+       
         const row = document.getElementById(`row-${orderId}`);
         if (row) {
             const badge = row.querySelector(".status-badge");
@@ -163,25 +163,25 @@ window.rejectOrder = function(orderId) {
     }
   }
 
-function updateOrderStatus(orderId, newStatus) {
-  let orders = getOrders();
+// function updateOrderStatus(orderId, newStatus) {
+//   let orders = getOrders();
 
-  orders = orders.map((order) => {
-    if (order.id === orderId) {
-      return { ...order, status: newStatus };
-    }
-    return order;
-  });
+//   orders = orders.map((order) => {
+//     if (order.id === orderId) {
+//       return { ...order, status: newStatus };
+//     }
+//     return order;
+//   });
 
-  storageManager.set("orders", orders);
+//   storageManager.set("orders", orders);
   
 
-  const row = storageManager.get(`row-${orderId}`);
-  if (row) row.remove();
+//   const row = storageManager.get(`row-${orderId}`);
+//   if (row) row.remove();
 
   
-  updateOrdersCount();
-}
+//   updateOrdersCount();
+// }
 
 
 window.confirmOrder = function (orderId) {
@@ -213,19 +213,16 @@ window.confirmOrder = function (orderId) {
     storageManager.set("products", products);
 const row = document.getElementById(`row-${orderId}`);
         if (row) {
-            // تغيير الـ status badge
+            // تغيير الـ status 
             const badge = row.querySelector(".status-badge");
             badge.textContent = "confirmed";
             badge.className = "status-badge bg-success text-white";
 
-            // تغيير الـ actions
+           
             const actionsTd = row.querySelector("td:last-child");
             actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
         }
    
-    // const row = document.getElementById(`row-${orderId}`);
-    // if (row) row.remove(); 
-// renderOrders("all", this.value);
 
     updateOrdersCount(); 
     
@@ -241,7 +238,7 @@ const row = document.getElementById(`row-${orderId}`);
 function updateOrdersCount() {
   const orders = getOrders(); 
 
-  // 1️⃣ عدد كل الطلبات
+  // ال  card
   const totalCount = orders.length;
 
   const totalOrdersElement = document.getElementById("total-orders-count");
@@ -249,7 +246,7 @@ function updateOrdersCount() {
     totalOrdersElement.innerText = totalCount.toLocaleString();
   }
 
-  // 2️⃣ عدد الـ pending فقط للـ sidebar
+  
   const pendingCount = orders.filter(order => order.status.toLowerCase() === "pending").length;
 
   const sidebarBadge = document.getElementById("sidebar-orders-badge");
