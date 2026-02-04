@@ -4,6 +4,7 @@
   --bs-primary: #135bec;
   --bs-primary-rgb: 19, 91, 236;
   --bs-primary-hover: #0f4bc5;
+  /* --bs-primary-hover: #738ec3; */
 
   --bs-secondary: #64748b;
   --bs-secondary-rgb: 100, 116, 139;
@@ -37,6 +38,6 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
   /* Layout Dimensions */
-  --sidebar-width: 260px;
+  --sidebar-width: 270px;
   --navbar-height: 72px;
 }

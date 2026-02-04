@@ -214,61 +214,59 @@ const fakeProducts = [
 ];
 
 import StorageManager from "./storage-helper.js";
-import { Category, Product } from "./../../modules/admin/classes.js";
+import Product from "./../../modules/admin/Product.js";
+import Category from "./../../modules/admin/Category.js";
 
 // categories
 const category1 = new Category(
-  1,
   "Men's Clothing",
   "A blend of classic tailoring and modern casual essentials designed for the contemporary man. From sharp office wear to relaxed weekend staples, find high-quality fabrics and perfect fits.  Upgrade your wardrobe with durable pieces that balance comfort, style, and functionality.",
+  1,
 );
 
 const category2 = new Category(
-  2,
   "Women's Clothing",
-  "A blend of classic tailoring and modern casual essentials designed for the contemporary woman. From sharp office wear to relaxed weekend staples, find high-quality fabrics and perfect fits.  Upgrade your wardrobe with durable pieces that balance comfort, style, and functionality.",
+  "A blend of classic tailoring and modern casual essentials designed for the contemporary man. From sharp office wear to relaxed weekend staples, find high-quality fabrics and perfect fits.  Upgrade your wardrobe with durable pieces that balance comfort, style, and functionality.",
+  2,
 );
 
 const category3 = new Category(
-  3,
   "Jewelry",
   "Exquisite pieces crafted to add a touch of elegance and personal flair to any ensemble. Explore a collection ranging from minimalist gold and silver accents to bold, statement gemstones. The perfect destination for timeless gifts and high-quality accessories that last a lifetime.",
+  3,
 );
 
 const category4 = new Category(
-  4,
   "Electronics",
   "Cutting-edge technology designed to streamline your life and enhance your digital experience. Featuring the latest in high-performance computing, premium audio, and smart home connectivity. Stay ahead of the curve with innovative gadgets built for productivity, gaming, and entertainment.",
+  4,
 );
 
-// categories list
-const categories = [category1, category2, category3, category4];
-
-// products
-const products = fakeProducts.map(
-  (p) =>
-    new Product(
-      p.id,
-      p.name,
-      p.description,
-      p.categoryId,
-      p.image,
-      p.price,
-      p.stockQuantity,
-    ),
-);
-
-console.log(products);
-
+// localStorage.clear();
 const storageManager = new StorageManager();
 
-const existingProducts = storageManager.get("products");
-const existingCategories = storageManager.get("categories");
-
-if (!existingProducts || existingProducts.length === 0) {
-  console.log("Loading initial data...");
-  storageManager.set("products", products);
+// categories
+export function saveCategoriesDummy() {
+  // categories list
+  const categories = [category1, category2, category3, category4];
+  console.log(categories);
   storageManager.set("categories", categories);
-} else {
-  console.log("Data already exists in localStorage");
+}
+// products
+export function saveProductsDummy() {
+  setTimeout(() => {
+    const products = fakeProducts.map(
+      (p) =>
+        new Product(
+          p.name,
+          p.description,
+          p.categoryId,
+          p.image,
+          p.price,
+          p.stockQuantity,
+          p.id,
+        ),
+    );
+    storageManager.set("products", products);
+  }, 100);
 }

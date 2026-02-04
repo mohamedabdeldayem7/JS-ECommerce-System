@@ -1,6 +1,5 @@
-export class Product {
+export default class Product {
   constructor(
-    id = Date.now(),
     name,
     description,
     categoryId,
@@ -8,6 +7,7 @@ export class Product {
     price,
     stockQuantity,
     features = [],
+    id = Date.now(),
   ) {
     // validation need in each field
     this.id = id;
@@ -40,7 +40,7 @@ export class Product {
     return this.description;
   }
   set setDescription(value) {
-    this.description = value || "No description provided.";
+    this.description = value.trim() === "" ? "No description provided." : value;
   }
 
   // Category ID
@@ -48,8 +48,9 @@ export class Product {
     return this.categoryId;
   }
   set setCategoryId(value) {
-    if (!value) throw new Error("Category ID is required.");
-    this.categoryId = value;
+    if (!Validation.validateProductCategory(value))
+      throw new Error("Category ID is required.");
+    else this.categoryId = value;
   }
 
   // Image
@@ -57,7 +58,7 @@ export class Product {
     return this.image;
   }
   set setImage(value) {
-    this.image = value || "default-placeholder.png";
+    this.image = value.trim() === "" ? "default-placeholder.png" : value;
   }
 
   // Price
@@ -89,33 +90,20 @@ export class Product {
   }
 }
 
-export class Category {
-  constructor(id = Date.now(), name, description) {
-    this.id = id;
-    this.setName = name;
-    this.setDescription = description;
-  }
+import StorageManager from "./../../utils/storage/storage-helper.js";
+class Validation {
+  static storageManager = new StorageManager();
 
-  // ID
-  get getId() {
-    return this.id;
-  }
+  constructor() {}
 
-  // Name
-  get getName() {
-    return this.name;
-  }
-  set setName(value) {
-    if (typeof value !== "string" || value.trim() === "")
-      throw new Error("Invalid name.");
-    this.name = value;
-  }
+  static validateProductCategory = function (categoryId) {
+    const categories = Validation.storageManager.get("categories");
 
-  // Description
-  get getDescription() {
-    return this.description;
-  }
-  set setDescription(value) {
-    this.description = value || "No description provided.";
-  }
+    if (!Array.isArray(categories)) {
+      console.error("cannot read categories");
+      return false;
+    }
+
+    return categories.some((cat) => cat.id === categoryId);
+  };
 }

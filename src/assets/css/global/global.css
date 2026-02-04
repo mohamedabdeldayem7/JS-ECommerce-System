@@ -34,7 +34,7 @@
   font-weight: 500;
 }
 
-.nav-link:hover,
+.nav-link :hover,
 .nav-link.active {
   color: var(--bs-primary) !important;
 }
