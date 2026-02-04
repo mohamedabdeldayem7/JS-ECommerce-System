@@ -16,7 +16,11 @@ if (!storage.get("products") || storage.get("products").length === 0) {
 
 function getCurrentUserId() {
   const userId = storage.getCookie(KEYS.CURRENT_USER);
-  return userId || "guest";
+  return userId || null;
+}
+
+function isUserLoggedIn() {
+  return getCurrentUserId() !== null;
 }
 
 const productsContainer = document.getElementById("products-container");
@@ -58,12 +62,16 @@ function loadData() {
   allProducts = storage.get("products") || [];
   allCategories = storage.get("categories") || [];
   
-  const userId = getCurrentUserId();
-  const wishlistKey = `wishlist_${userId}`;
-  const wishlistData = storage.get(wishlistKey) || { id: wishlistKey, usrID: userId, items: [] };
-  
-  if (wishlistData.items) {
-    wishlist = wishlistData.items.map(item => allProducts.find(p => p.id === item.pId)).filter(p => p);
+  if (isUserLoggedIn()) {
+    const userId = getCurrentUserId();
+    const wishlistKey = `wishlist_${userId}`;
+    const wishlistData = storage.get(wishlistKey) || { id: wishlistKey, usrID: userId, items: [] };
+    
+    if (wishlistData.items) {
+      wishlist = wishlistData.items.map(item => allProducts.find(p => p.id === item.pId)).filter(p => p);
+    } else {
+      wishlist = [];
+    }
   } else {
     wishlist = [];
   }
@@ -187,10 +195,14 @@ function createProductCard(product) {
   const category = allCategories.find((cat) => cat.id === product.categoryId);
   const categoryName = category ? category.name : "Uncategorized";
   
-  const userId = getCurrentUserId();
-  const wishlistKey = `wishlist_${userId}`;
-  const wishlistData = storage.get(wishlistKey) || { items: [] };
-  const isInWishlist = wishlistData.items && wishlistData.items.some((item) => item.pId === product.id);
+  let isInWishlist = false;
+  if (isUserLoggedIn()) {
+    const userId = getCurrentUserId();
+    const wishlistKey = `wishlist_${userId}`;
+    const wishlistData = storage.get(wishlistKey) || { items: [] };
+    isInWishlist = wishlistData.items && wishlistData.items.some((item) => item.pId === product.id);
+  }
+  
   const rating = (Math.random() * (5 - 4) + 4).toFixed(1);
 
   card.innerHTML = `
@@ -241,6 +253,11 @@ function createProductCard(product) {
 }
 
 function toggleWishlist(productId) {
+  if (!isUserLoggedIn()) {
+    window.location.href = "pages/auth/login.html";
+    return;
+  }
+
   const product = allProducts.find((p) => p.id === productId);
   if (!product) return;
 
@@ -281,6 +298,11 @@ function toggleWishlist(productId) {
 }
 
 function addToCart(product) {
+  if (!isUserLoggedIn()) {
+    window.location.href = "pages/auth/login.html";
+    return;
+  }
+
   if (product.stockQuantity === 0) return;
 
   const userId = getCurrentUserId();
@@ -312,6 +334,14 @@ function updateWishlistCount() {
 }
 
 function updateCartCount() {
+  if (!isUserLoggedIn()) {
+    const cartCountBadge = document.getElementById("cart-count");
+    if (cartCountBadge) {
+      cartCountBadge.textContent = 0;
+    }
+    return;
+  }
+
   const userId = getCurrentUserId();
   const cartKey = `cart_${userId}`;
   const cart = storage.get(cartKey) || { items: [] };
