@@ -36,7 +36,7 @@
       class="d-lg-none d-flex align-items-center justify-content-between bg-white p-3 border-bottom"
     >
       <div class="d-flex align-items-center gap-2 fw-bold text-primary">
-        <span class="material-symbols-rounded">local_mall</span> ShopEase
+        <span class="material-symbols-rounded">local_mall</span> Lafyuu
       </div>
       <button class="btn p-1 border-0" onclick="toggleSidebar()">
         <span class="material-symbols-rounded">menu</span>
@@ -58,7 +58,7 @@
             class="m-0 fw-bold text-dark"
             style="color: var(--bs-heading-color)"
           >
-            ShopEase
+            Lafyuu
           </h5>
           <p
             class="m-0 text-muted fw-bold"
@@ -255,6 +255,7 @@
                 >search</span
               >
               <input
+                id="searchInput"
                 type="text"
                 class="form-control border-0 shadow-none bg-transparent ps-2"
                 placeholder="Search by pruduct name..."
@@ -262,13 +263,69 @@
             </div>
 
             <div class="w-100 d-flex justify-content-end gap-3">
-              <button
+              <!-- <button
                 class="btn btn-white border shadow-sm px-3 d-flex align-items-center gap-2"
               >
                 <span class="material-symbols-rounded fs-5">filter_list</span>
                 <span class="d-none d-md-inline small">Filter</span>
-              </button>
+              </button> -->
 
+              <!-- filters -->
+              <div class="dropdown filter-container">
+                <button
+                  class="btn dropdown-toggle custom-filter-btn"
+                  type="button"
+                  id="filterDropdown"
+                  data-bs-toggle="dropdown"
+                  data-bs-auto-close="outside"
+                  aria-expanded="false"
+                >
+                  <span class="material-symbols-rounded fs-5">filter_list</span>
+                  <span class="d-none d-md-inline small">Filter</span>
+                </button>
+
+                <div
+                  class="dropdown-menu dropdown-menu-end p-3 shadow-sm border-0 custom-dropdown-menu"
+                  aria-labelledby="filterDropdown"
+                >
+                  <h6 class="dropdown-header px-0 mb-2 text-dark fw-bold">
+                    Filter Options
+                  </h6>
+
+                  <div class="mb-3">
+                    <label
+                      for="categorySelect"
+                      class="form-label small fw-semibold"
+                      >Category</label
+                    >
+                    <select
+                      class="form-select form-select-sm"
+                      id="categorySelect"
+                    ></select>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="sortSelect" class="form-label small fw-semibold"
+                      >Sort By</label
+                    >
+                    <select class="form-select form-select-sm" id="sortSelect">
+                      <option value="all">nothing</option>
+                      <option value="lowPrice">Price: Low to High</option>
+                      <option value="highPrice">Price: High to Low</option>
+                      <option value="lowStock">Stock: Low to High</option>
+                      <option value="highStock">Stock: High to Low</option>
+                    </select>
+                  </div>
+
+                  <button
+                    class="btn btn-sm btn-outline-primary w-100 mt-2"
+                    id="resetFilters"
+                  >
+                    Reset All
+                  </button>
+                </div>
+              </div>
+              <!-- / filters -->
               <button
                 onclick="openAddModal()"
                 class="btn btn-primary shadow-sm px-4 d-flex align-items-center gap-2 fw-bold"
@@ -454,18 +511,16 @@
       <section id="orders" class="content-section d-none">
         <h2 class="fw-bold mb-4">Orders</h2>
         <div class="card border-0 shadow-sm table-wrapper">
-         
           <div
             class="orders-top-row d-flex align-items-center justify-content-between p-3 bg-white"
           >
             <div class="orders-toggle-group">
               <button class="filter-btn" data-filter="all">All Orders</button>
               <button class="filter-btn" data-filter="pending">pending</button>
-              <button class="filter-btn" data-filter="Completed">Completed</button>
-              
+              <button class="filter-btn" data-filter="Completed">
+                Completed
+              </button>
             </div>
-
-          
 
             <div class="d-flex align-items-center">
               <label> Sort:</label>
@@ -556,8 +611,6 @@
             </table>
           </div>
         </div>
-
-        
       </section>
 
       <section id="admin" class="content-section d-none">
@@ -760,9 +813,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="../../src/modules/admin/dashboard.js"></script>
     <script type="module" src="../../src/modules/admin/Order.js"></script>
-    <script
+    <!-- <script
       type="module"
       src="../../src/modules/admin/product-crud.js"
-    ></script>
+    ></script> -->
+    <script>
+      // localStorage.clear();
+    </script>
   </body>
 </html>

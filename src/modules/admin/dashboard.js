@@ -15,6 +15,14 @@ import {
   renderCategoriesTable,
 } from "./category-crud.js";
 import Category from "./Category.js";
+import {
+  saveCategoriesDummy,
+  saveProductsDummy,
+} from "./../../utils/storage/dummyData.js";
+import FilterService from "./filterService.js";
+// dummy data loader
+if (getAllCategories().length === 0) saveCategoriesDummy();
+if (getAllProducts().length === 0) saveProductsDummy();
 
 // sidebar
 
@@ -126,6 +134,7 @@ productForm.onsubmit = function (e) {
       imageInput,
       priceInput,
       stockInput,
+      [],
       idInput,
     );
     flag = false;
@@ -137,6 +146,7 @@ productForm.onsubmit = function (e) {
       imageInput,
       priceInput,
       stockInput,
+      [],
     );
   }
   saveProduct(product);
@@ -145,6 +155,44 @@ productForm.onsubmit = function (e) {
   productModal.hide();
   changePage(1);
 };
+
+// search ,filter and sort
+const searchInput = document.getElementById("searchInput");
+const categorySelect = document.getElementById("categorySelect");
+const sortSelect = document.getElementById("sortSelect");
+
+// <option value="all">All Categories</option>
+// <option value="electronics">Electronics</option>
+categorySelect.innerHTML = "";
+categorySelect.innerHTML = '<option value="all">All Categories</option>';
+getAllCategories().forEach((c) => {
+  categorySelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+});
+
+function updateProductTable() {
+  const products = getAllProducts();
+  // console.log("from filter", products);
+
+  let catId;
+  if (categorySelect.value !== "all")
+    catId = getAllCategories().find((c) => c.name === categorySelect.value);
+  const filters = {
+    searchQuery: searchInput.value,
+    category: categorySelect.value === "all" ? categorySelect.value : catId.id,
+    sortBy: sortSelect.value,
+  };
+
+  const filteredData = FilterService.filterProducts(products, filters);
+
+  changePage(1, filteredData);
+}
+
+searchInput.addEventListener("input", updateProductTable);
+categorySelect.addEventListener("change", updateProductTable);
+sortSelect.addEventListener("change", updateProductTable);
+document
+  .getElementById("resetFilters")
+  .addEventListener("click", () => changePage(1));
 
 // on delete clicked
 window.deleteProduct = function (id) {
@@ -186,11 +234,16 @@ function renderPagination(totalItems) {
 }
 
 // to change page
-window.changePage = function (page) {
-  const products = getAllProducts();
+window.changePage = function (page, products = getAllProducts()) {
+  // const products = getAllProducts();
   const totalPages = Math.ceil(products.length / rowsPerPage);
+  console.log(products);
 
-  if (page < 1 || page > totalPages) return;
+  if (page < 1 || page > totalPages) {
+    const productBody = document.getElementById("productBody");
+    productBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">No Products found.</td></tr>`;
+    return;
+  }
 
   currentPage = page;
 
@@ -213,6 +266,7 @@ function updatePaginationInfo(start, end, total) {
     `Showing ${start} to ${end} of ${total} entries`;
 }
 
+// call first time
 changePage(1);
 
 // Categories

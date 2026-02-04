@@ -11,8 +11,7 @@ import StorageManager from "./../../utils/storage/storage-helper.js";
 
 const storageManager = new StorageManager();
 document.addEventListener("DOMContentLoaded", () => {
-  
-  renderOrders( "all", "oldest");
+  renderOrders("all", "oldest");
   updateOrdersCount();
 });
 
@@ -61,26 +60,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ----------------------------------------------------------------------------------
 export function getOrders() {
-  return storageManager.get("orders");
+  return storageManager.get("orders") || [];
 }
 
 function renderOrders(filterType = "all", sortType = "oldest") {
-    const orders = getOrders();
+  const orders = getOrders();
 
+  const filteredOrders = orders.filter((order) => {
+    if (filterType === "pending") {
+      return order.status === "pending";
+    } else if (filterType === "completed") {
+      return order.status === "confirmed" || order.status === "rejected";
+    }
+    return true;
+  });
 
-    const filteredOrders = orders.filter((order) => {
-        if (filterType === "pending") {
-            return order.status === "pending";
-        } else if (filterType === "completed") {
-           
-            return order.status === "confirmed" || order.status === "rejected";
-        }
-        return true;
-    });
-
-   
-   filteredOrders.sort((a, b) => {
-        if (sortType === "oldest") {
+  filteredOrders.sort((a, b) => {
+    if (sortType === "oldest") {
       return new Date(a.date) - new Date(b.date);
     }
 
@@ -95,19 +91,20 @@ function renderOrders(filterType = "all", sortType = "oldest") {
     if (sortType === "lowest") {
       return a.total - b.total;
     }
-    });
-//عرض البيانات ف الجدول
-    const tableBody = document.getElementById("ordersTableBody");
-    tableBody.innerHTML = ""; 
+  });
+  //عرض البيانات ف الجدول
+  const tableBody = document.getElementById("ordersTableBody");
+  tableBody.innerHTML = "";
 
-    
-    filteredOrders.forEach((order) => {
-      
-        const statusClass = 
-            order.status === "pending" ? "bg-warning text-dark" : 
-            order.status === "confirmed" ? "bg-success text-white" : "bg-danger text-white";
+  filteredOrders.forEach((order) => {
+    const statusClass =
+      order.status === "pending"
+        ? "bg-warning text-dark"
+        : order.status === "confirmed"
+          ? "bg-success text-white"
+          : "bg-danger text-white";
 
-        tableBody.innerHTML += `
+    tableBody.innerHTML += `
             <tr id="row-${order.id}">
                 <td>#${order.id}</td>
                 <td>Customer #${order.customerId}</td>
@@ -117,51 +114,52 @@ function renderOrders(filterType = "all", sortType = "oldest") {
                     <span class="status-badge ${statusClass}">${order.status}</span>
                 </td>
                 <td>
-                    ${order.status === 'pending' ? `
+                    ${
+                      order.status === "pending"
+                        ? `
                         <button class="btn btn-primary btn-sm" onclick="confirmOrder('${order.id}')">Confirm</button>
                         <button class="btn btn-outline-danger btn-sm" onclick="rejectOrder('${order.id}')">Reject</button>
-                    ` : `<span class="text-muted">No Actions</span>`}
+                    `
+                        : `<span class="text-muted">No Actions</span>`
+                    }
                 </td>
             </tr>
         `;
-    });
+  });
 }
 document.getElementById("sortOrders").addEventListener("change", function () {
   renderOrders("all", this.value);
 });
 
-
-document.querySelectorAll(".filter-btn").forEach(btn => {
+document.querySelectorAll(".filter-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     const filter = btn.getAttribute("data-filter").toLowerCase();
     const sort = document.getElementById("sortOrders").value.toLowerCase();
     renderOrders(filter, sort);
-   
   });
 });
 
-window.rejectOrder = function(orderId) {
-    const ord = getOrders();
-    const index = ord.findIndex(o => o.id === orderId);
+window.rejectOrder = function (orderId) {
+  const ord = getOrders();
+  const index = ord.findIndex((o) => o.id === orderId);
 
-    if (index !== -1) {
-        ord[index].status = "rejected";
-        storageManager.set("orders", ord);
+  if (index !== -1) {
+    ord[index].status = "rejected";
+    storageManager.set("orders", ord);
 
-       
-        const row = document.getElementById(`row-${orderId}`);
-        if (row) {
-            const badge = row.querySelector(".status-badge");
-            badge.textContent = "rejected";
-            badge.className = "status-badge bg-danger text-white";
+    const row = document.getElementById(`row-${orderId}`);
+    if (row) {
+      const badge = row.querySelector(".status-badge");
+      badge.textContent = "rejected";
+      badge.className = "status-badge bg-danger text-white";
 
-            const actionsTd = row.querySelector("td:last-child");
-            actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
-        }
-
-        updateOrdersCount();
+      const actionsTd = row.querySelector("td:last-child");
+      actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
     }
+
+    updateOrdersCount();
   }
+};
 
 // function updateOrderStatus(orderId, newStatus) {
 //   let orders = getOrders();
@@ -174,15 +172,12 @@ window.rejectOrder = function(orderId) {
 //   });
 
 //   storageManager.set("orders", orders);
-  
 
 //   const row = storageManager.get(`row-${orderId}`);
 //   if (row) row.remove();
 
-  
 //   updateOrdersCount();
 // }
-
 
 window.confirmOrder = function (orderId) {
   const ord = getOrders();
@@ -198,45 +193,37 @@ window.confirmOrder = function (orderId) {
       if (productInStock) {
         // check if the product is available
         if (productInStock.stockQuantity >= orderItem.quantity) {
-             productInStock.stockQuantity -= orderItem.quantity;
+          productInStock.stockQuantity -= orderItem.quantity;
         } else {
-             productInStock.stockQuantity = 0; 
-             console.warn(`the product ${productInStock.name} is out of stock`);
+          productInStock.stockQuantity = 0;
+          console.warn(`the product ${productInStock.name} is out of stock`);
         }
       }
     });
 
     ord[orderIndex].status = "confirmed";
 
-
     storageManager.set("orders", ord);
     storageManager.set("products", products);
-const row = document.getElementById(`row-${orderId}`);
-        if (row) {
-            // تغيير الـ status 
-            const badge = row.querySelector(".status-badge");
-            badge.textContent = "confirmed";
-            badge.className = "status-badge bg-success text-white";
+    const row = document.getElementById(`row-${orderId}`);
+    if (row) {
+      // تغيير الـ status
+      const badge = row.querySelector(".status-badge");
+      badge.textContent = "confirmed";
+      badge.className = "status-badge bg-success text-white";
 
-           
-            const actionsTd = row.querySelector("td:last-child");
-            actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
-        }
-   
+      const actionsTd = row.querySelector("td:last-child");
+      actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
+    }
 
-    updateOrdersCount(); 
-    
-   
-    
-    
+    updateOrdersCount();
   }
 };
-
 
 // -----------------------------------------
 // اظها عدد الاوردار ف ال cart و order اللي ف السايد بار
 function updateOrdersCount() {
-  const orders = getOrders(); 
+  const orders = getOrders();
 
   // ال  card
   const totalCount = orders.length;
@@ -246,8 +233,9 @@ function updateOrdersCount() {
     totalOrdersElement.innerText = totalCount.toLocaleString();
   }
 
-  
-  const pendingCount = orders.filter(order => order.status.toLowerCase() === "pending").length;
+  const pendingCount = orders.filter(
+    (order) => order.status.toLowerCase() === "pending",
+  ).length;
 
   const sidebarBadge = document.getElementById("sidebar-orders-badge");
   if (sidebarBadge) {
@@ -255,7 +243,6 @@ function updateOrdersCount() {
     sidebarBadge.style.display = pendingCount > 0 ? "inline-block" : "none";
   }
 }
-
 
 // const order = {
 //   customerId: 2,

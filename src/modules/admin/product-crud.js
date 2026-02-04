@@ -6,7 +6,7 @@ const storageManager = new StorageManager();
 
 // get all products
 export function getAllProducts() {
-  return toProductList(storageManager.get("products"));
+  return toProductList(storageManager.get("products")) || [];
 }
 
 // function to get a product by ID
@@ -63,6 +63,7 @@ function toProductList(data) {
           p.image,
           p.price,
           p.stockQuantity,
+          [],
           p.id,
         ),
     );
@@ -140,3 +141,5 @@ export function renderTable(products) {
     console.log("cannot complete writing..");
   }
 }
+
+// dummy data

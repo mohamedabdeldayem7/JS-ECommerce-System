@@ -268,9 +268,8 @@ export function saveProductsDummy() {
           p.id,
         ),
     );
+    console.log("from dummy", products);
+
     storageManager.set("products", products);
   }, 100);
 }
-
-saveCategoriesDummy();
-saveProductsDummy();

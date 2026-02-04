@@ -73,13 +73,16 @@ export class AuthService {
   // auth function
   static checkAuth() {
     const user = AuthService.storageManager.getCookie(KEYS.CURRENT_USER);
-    if (!user || !user.email) return null;
+    if (user === null) return null;
     return user;
-    const cart = storageManager.get(KEYS.CART) || [];
-    const cusCart = cart.find((c) => c.user_id === user.id);
-    cusCart.items.push = {
-      itemQnt: 4,
-      itemId: prod.id,
-    };
   }
 }
+
+// const cart = storageManager.get(KEYS.CART) || [];
+// const cusCart = cart.find((c) => c.user_id === user.id);
+// cusCart.items.push = {
+//   productId: product.id,
+//   qnt: 0,
+// };
+// (carts) => cart(userID);
+// (product) => pord.Id;

@@ -6,7 +6,7 @@ const storageManager = new StorageManager();
 
 // get all categories
 export function getAllCategories() {
-  return toCategoryList(storageManager.get("categories"));
+  return toCategoryList(storageManager.get("categories")) || [];
 }
 
 // function to get a category by ID
@@ -64,7 +64,7 @@ function toCategoryList(data) {
 
 // render function to diplay all categories in table
 export function renderCategoriesTable() {
-  const categories = getAllCategories();
+  const categories = getAllCategories() || [];
   const products = getAllProducts();
   const tbody = document.getElementById("categoriesTableBody");
 

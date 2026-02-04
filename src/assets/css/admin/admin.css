@@ -186,6 +186,39 @@ body {
   box-shadow: var(--shadow-md) !important;
   background-color: #fff;
 }
+
+/* filter style */
+.custom-filter-btn {
+  background-color: var(--surface-white, #fff);
+  border: 1px solid var(--border-color, #dee2e6);
+  border-radius: 25px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color, #333);
+  transition: all 0.3s ease;
+}
+
+.custom-filter-btn:hover {
+  border-color: var(--bs-primary-hover);
+}
+
+.custom-filter-btn::after {
+  display: none;
+}
+
+.custom-dropdown-menu {
+  min-width: 250px;
+  border-radius: var(--bs-border-radius-lg, 15px);
+  margin-top: 10px !important;
+}
+
+.custom-dropdown-menu .form-select {
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+/* end filter style */
 /* end header */
 /* table */
 .custom-table-container {
