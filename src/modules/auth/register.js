@@ -32,13 +32,13 @@ registrationForm.addEventListener("submit", function (e) {
     );
     console.log("try after register fun");
 
-    // message.innerHTML =
-    //   '<div class="alert alert-success">Registration successful!</div>';
+    message.innerHTML =
+      '<div class="alert alert-success">Registration successful!</div>';
     alert("Account Created Successfully!");
     setTimeout(() => {
       window.location.href = "../../index.html";
     }, 2000);
-    form.reset();
+    registrationForm.reset();
   } catch (error) {
     // message.textContent = "Can't complete Registration, Please check errors!";
     message.textContent = error.message;
@@ -99,10 +99,10 @@ repeatPassword.addEventListener("blur", function () {
   if (this.value === password.value) {
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
+    repeatPasswordError.innerText = "";
   } else {
     this.classList.remove("is-valid");
     this.classList.add("is-invalid");
-    repeatPasswordError.innerText = "";
     repeatPasswordError.innerText = "Passwords do not match!";
   }
 });
