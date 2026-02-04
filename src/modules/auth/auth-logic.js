@@ -66,6 +66,7 @@ export class AuthService {
 
   static logout() {
     AuthService.storageManager.eraseCookie(KEYS.CURRENT_USER);
+    window.location.href = "../../../pages/auth/login.html";
   }
   // auth function
   static checkAuth() {
