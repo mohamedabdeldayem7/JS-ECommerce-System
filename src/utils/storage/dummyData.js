@@ -249,7 +249,7 @@ const storageManager = new StorageManager();
 export function saveCategoriesDummy() {
   // categories list
   const categories = [category1, category2, category3, category4];
-  console.log(categories);
+  // console.log(categories);
   storageManager.set("categories", categories);
 }
 // products
@@ -264,9 +264,13 @@ export function saveProductsDummy() {
           p.image,
           p.price,
           p.stockQuantity,
+          [],
           p.id,
         ),
     );
     storageManager.set("products", products);
   }, 100);
 }
+
+saveCategoriesDummy();
+saveProductsDummy();

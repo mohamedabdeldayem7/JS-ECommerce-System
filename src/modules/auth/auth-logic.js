@@ -9,15 +9,15 @@ export class AuthService {
   static register(firstName, lastName, email, password) {
     const users = AuthService.storageManager.get(KEYS.USERS) || [];
 
-    if (users.length < 1) {
+    if (!users.length) {
       const admin = new User(
         "admin",
         "admin",
         "admin@gmail.com",
-        "admin@123",
+        "Admin@123",
         "admin",
+        99,
       );
-      users.push(admin);
       users.push(admin.toJSON());
       AuthService.storageManager.set(KEYS.USERS, users);
     }
@@ -36,17 +36,19 @@ export class AuthService {
   }
 
   static login(email, password) {
-    const users = AuthService.storageManager.get(KEYS.USERS);
+    const users = AuthService.storageManager.get(KEYS.USERS) || [];
 
-    if (users.length < 1) {
+    console.log(users);
+
+    if (!users.length) {
       const admin = new User(
         "admin",
         "admin",
         "admin@gmail.com",
-        "admin@123",
+        "Admin@123",
         "admin",
+        999,
       );
-      users.push(admin);
       users.push(admin.toJSON());
       AuthService.storageManager.set(KEYS.USERS, users);
     }
@@ -73,5 +75,11 @@ export class AuthService {
     const user = AuthService.storageManager.getCookie(KEYS.CURRENT_USER);
     if (!user || !user.email) return null;
     return user;
+    const cart = storageManager.get(KEYS.CART) || [];
+    const cusCart = cart.find((c) => c.user_id === user.id);
+    cusCart.items.push = {
+      itemQnt: 4,
+      itemId: prod.id,
+    };
   }
 }
