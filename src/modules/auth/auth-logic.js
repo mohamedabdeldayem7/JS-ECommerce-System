@@ -75,11 +75,12 @@ export class AuthService {
     const user = AuthService.storageManager.getCookie(KEYS.CURRENT_USER);
     if (!user || !user.email) return null;
     return user;
-    const cart = storageManager.get(KEYS.CART) || [];
-    const cusCart = cart.find((c) => c.user_id === user.id);
-    cusCart.items.push = {
-      itemQnt: 4,
-      itemId: prod.id,
-    };
-  }
+  //   const cart = storageManager.get(KEYS.CART) || [];
+  //   const cusCart = cart.find((c) => c.user_id === user.id);
+  //   cusCart.items.push = {
+  //     itemQnt: 4,
+  //     itemId: prod.id,
+  //   };
+  // }
+}
 }
