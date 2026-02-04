@@ -351,3 +351,113 @@ window.showToast = function (message, type = "success") {
   const toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // تختفي بعد 3 ثواني
   toast.show();
 };
+
+// add admin section
+
+// imports
+import { AuthService } from "./../auth/auth-logic.js";
+import { UserValidations, User } from "./../auth/User.js";
+import StorageManager from "../../utils/storage/storage-helper.js";
+import KEYS from "../../utils/keys.js";
+
+const storage = new StorageManager();
+
+const addAdminForm = document.getElementById("addAdminForm");
+const message = document.getElementById("message");
+
+// from inputs
+const firstName = document.getElementById("firstName");
+const lastName = document.getElementById("lastName");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+// error-msg
+const firstNameError = document.getElementById("firstNameError");
+const lastNameError = document.getElementById("lastNameError");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+
+addAdminForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  try {
+    const users = storage.get(KEYS.USERS) || [];
+    console.log("try brfore register fun");
+
+    if (users.some((u) => u.email === email.value.trim().toLowerCase())) {
+      // Check Duplicates
+      message.textContent = "Email already registered!";
+      message.classList.add("text-danger");
+    }
+
+    const newAdmin = new User(
+      firstName.value,
+      lastName.value,
+      email.value,
+      password.value,
+      "admin",
+    );
+
+    console.log("after create new admin obj in dashboard");
+
+    storage.pushToItem(KEYS.USERS, newAdmin.toJSON());
+    message.innerHTML =
+      '<div class="alert alert-success">Add new admin successful!</div>';
+    // alert("New admin account Created Successfully!");
+    setTimeout(() => {
+      window.location.href = "../../../pages/admin/dashboard.html";
+    }, 500);
+    addAdminForm.reset();
+  } catch (error) {
+    message.textContent = error.message;
+    message.classList.add("text-danger");
+  }
+});
+
+firstName.addEventListener("blur", function () {
+  try {
+    UserValidations.validateName(this.value);
+    this.classList.remove("is-invalid");
+    this.classList.add("is-valid");
+    firstNameError.innerText = "";
+  } catch (error) {
+    this.classList.add("is-invalid");
+    firstNameError.innerText = error.message;
+  }
+});
+
+lastName.addEventListener("blur", function () {
+  try {
+    UserValidations.validateName(this.value);
+    this.classList.remove("is-invalid");
+    this.classList.add("is-valid");
+    lastNameError.innerText = "";
+  } catch (error) {
+    this.classList.add("is-invalid");
+    lastNameError.innerText = error.message;
+    console.log(error, message);
+  }
+});
+
+email.addEventListener("blur", function () {
+  try {
+    UserValidations.validateEmail(this.value);
+    this.classList.remove("is-invalid");
+    this.classList.add("is-valid");
+    emailError.innerText = "";
+  } catch (error) {
+    this.classList.add("is-invalid");
+    emailError.innerText = error.message;
+  }
+});
+
+password.addEventListener("blur", function () {
+  try {
+    UserValidations.validatePassword(this.value);
+    this.classList.remove("is-invalid");
+    this.classList.add("is-valid");
+    passwordError.innerText = "";
+  } catch (error) {
+    this.classList.add("is-invalid");
+    passwordError.innerText = error.message;
+  }
+});
