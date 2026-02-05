@@ -503,3 +503,19 @@ if (logoutBtn) {
     }
   });
 }
+
+setInterval(() => {
+  const userId = parseInt(AuthService.checkAuth());
+  const users = storage.get(KEYS.USERS) || [];
+
+  console.log(userId, users);
+
+  if (userId) {
+    console.log(users.find((u) => u.id === userId));
+
+    if (users.find((u) => u.id === userId).role !== "admin") {
+      alert("you cannot reach this page..!");
+      window.location.href = "../../../pages/auth/login.html";
+    }
+  }
+}, 500);
