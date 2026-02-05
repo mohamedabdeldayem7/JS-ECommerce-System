@@ -1,7 +1,7 @@
 import {
   getOrders,
   getAllProducts,
-  getStatusBadge
+  getStatusBadge,
 } from "../../utils/storage/OrderService.js";
 ////////
 import StorageManager from "../../utils/storage/storage-helper.js";
@@ -23,10 +23,10 @@ function updateNavbarCounts() {
   const wishlist = getWishlist();
   const cart = getCart();
   const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  
+
   const wishlistBadge = document.getElementById("wishlist-count");
   const cartBadge = document.getElementById("cart-count");
-  
+
   if (wishlistBadge) {
     wishlistBadge.textContent = wishlist.length;
   }
@@ -36,7 +36,6 @@ function updateNavbarCounts() {
 }
 //////
 function renderOrders() {
-
   const container = document.getElementById("orders-container");
   const empty = document.getElementById("empty-orders");
 
@@ -63,8 +62,7 @@ function renderOrders() {
 
   empty.classList.add("d-none");
 
-  orders.forEach(order => {
-
+  orders.forEach((order) => {
     const detailsId = `details-${order.id}`;
     const badge = getStatusBadge(order.status);
 
@@ -95,12 +93,12 @@ function renderOrders() {
       <td colspan="5" class="p-0">
         <div class="collapse bg-light" id="${detailsId}">
           <div class="p-4">
-            ${order.items.map(item => {
+            ${order.items
+              .map((item) => {
+                const product = products.find((p) => p.id == item.productId);
+                if (!product) return "";
 
-              const product = products.find(p => p.id == item.productId);
-              if (!product) return "";
-
-              return `
+                return `
                 <div class="order-product">
                   <img src="${product.image}">
                   <div class="flex-grow-1">
@@ -112,7 +110,8 @@ function renderOrders() {
                   </div>
                 </div>
               `;
-            }).join("")}
+              })
+              .join("")}
           </div>
         </div>
       </td>
