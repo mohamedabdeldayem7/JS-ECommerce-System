@@ -2,15 +2,15 @@ import {
   getWishlist,
   removeFromWishlist,
   moveToCart
-} from "../../utils/storage/WishlistService.js";
-import { getCart } from "../../utils/storage/CartService.js";
-import { Navbar } from "../../components/navbar.js";
-import { Footer } from "../../components/footer.js";
+} from "./WishlistService.js";
+import { getCart } from "../cart/CartService.js";
+import { Navbar } from "../../../components/navbar.js";
+import { Footer } from "../../../components/footer.js";
 
 /* ===================== NEW IMPORT ===================== */
 // ADDED: to read current user from cookies (same as orders)
-import StorageManager from "../../utils/storage/storage-helper.js";
-import KEYS from "../../utils/keys.js";
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
 /* ===================== END NEW IMPORT ===================== */
 
 // ADDED: storage instance

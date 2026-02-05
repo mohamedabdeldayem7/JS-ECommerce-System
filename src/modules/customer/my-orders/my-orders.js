@@ -1,18 +1,13 @@
-import {
-  getOrders,
-  getAllProducts,
-  getStatusBadge,
-} from "../../utils/storage/OrderService.js";
+import { getOrders, getAllProducts, getStatusBadge } from "./OrderService.js";
 ////////
-import StorageManager from "../../utils/storage/storage-helper.js";
-import KEYS from "../../utils/keys.js";
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
 ///////
-import { getCart } from "../../utils/storage/CartService.js";
-import { getWishlist } from "../../utils/storage/WishlistService.js";
-import { Navbar } from "../../components/navbar.js";
+import { getCart } from "../cart/CartService.js";
+import { getWishlist } from "../wishlist/WishlistService.js";
+import { Navbar } from "../../../components/navbar.js";
 
 const storage = new StorageManager();
-
 
 function initializeNavbar() {
   const navbar = new Navbar("navbar-container", "../../");
@@ -124,7 +119,7 @@ function renderOrders() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeNavbar();
-    // initializeFooter();
+  // initializeFooter();
 
   updateNavbarCounts();
   renderOrders();

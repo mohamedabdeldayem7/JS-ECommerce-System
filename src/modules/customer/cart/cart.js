@@ -3,14 +3,14 @@ import {
   saveCart,
   calculateTotals,
   placeOrder,
-} from "../../utils/storage/CartService.js";
-import { getWishlist } from "../../utils/storage/WishlistService.js";
-import { Navbar } from "../../components/navbar.js";
+} from "./CartService.js";
+import { getWishlist } from "../wishlist/WishlistService.js";
+import { Navbar } from "../../../components/navbar.js";
 
 /* ===================== NEW IMPORT ===================== */
 // ADDED: read current user id from cookies (same as orders & wishlist)
-import StorageManager from "../../utils/storage/storage-helper.js";
-import KEYS from "../../utils/keys.js";
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
 /* ===================== END NEW IMPORT ===================== */
 
 // ADDED: storage instance
@@ -96,7 +96,6 @@ function renderCart() {
     return;
   }
   /* ===================== END MODIFIED ===================== */
-
 
   const cart = getCart();
   const products = getProducts();

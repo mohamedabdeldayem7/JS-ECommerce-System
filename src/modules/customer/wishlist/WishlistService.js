@@ -4,8 +4,8 @@ const CURRENT_USER_KEY = "currentUser";
 
 /* ===================== NEW ===================== */
 // ADDED: use cookies instead of localStorage for current user
-import StorageManager from "./storage-helper.js";
-import KEYS from "../keys.js";
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
 
 const storage = new StorageManager();
 /* ===================== END NEW ===================== */

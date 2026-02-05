@@ -1,8 +1,8 @@
-import KEYS from "./../keys.js";
+import KEYS from "../../../utils/keys.js";
 
 class OrderService {
   /* ===== ORDERS ===== */
- // 🔽 MODIFIED: allow fetching orders for a specific customerId
+  // 🔽 MODIFIED: allow fetching orders for a specific customerId
   static getOrders(customerId = null) {
     const orders = JSON.parse(localStorage.getItem(KEYS.ORDERS)) || [];
 
@@ -10,12 +10,12 @@ class OrderService {
     if (!customerId) return orders;
 
     // 🔽 filter orders by logged-in customerId
-    return orders.filter(order => order.customerId == customerId);
+    return orders.filter((order) => order.customerId == customerId);
   }
   static saveOrders(orders) {
     localStorage.setItem(KEYS.ORDERS, JSON.stringify(orders));
   }
-//////////////////////////
+  //////////////////////////
   /* ===== PRODUCTS ===== */
   static getAllProducts() {
     return JSON.parse(localStorage.getItem(KEYS.PRODUCT)) || [];
@@ -33,6 +33,6 @@ class OrderService {
 /* EXPORTS */
 export const getOrders = (customerId) => OrderService.getOrders(customerId);
 ////////////////
-export const saveOrders     = (o) => OrderService.saveOrders(o);
+export const saveOrders = (o) => OrderService.saveOrders(o);
 export const getAllProducts = () => OrderService.getAllProducts();
 export const getStatusBadge = (s) => OrderService.getStatusBadge(s);
