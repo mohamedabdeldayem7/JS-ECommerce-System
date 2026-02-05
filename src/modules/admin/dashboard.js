@@ -20,6 +20,10 @@ import {
   saveProductsDummy,
 } from "./../../utils/storage/dummyData.js";
 import FilterService from "./filterService.js";
+import { UserValidations, User } from "./../auth/User.js";
+import StorageManager from "../../utils/storage/storage-helper.js";
+import KEYS from "../../utils/keys.js";
+
 // dummy data loader
 if (getAllCategories().length === 0) saveCategoriesDummy();
 if (getAllProducts().length === 0) saveProductsDummy();
@@ -184,7 +188,7 @@ function updateProductTable() {
 
   const filteredData = FilterService.filterProducts(products, filters);
 
-  changePage(1, filteredData);
+  renderTable(filteredData);
 }
 
 searchInput.addEventListener("input", updateProductTable);
@@ -361,10 +365,6 @@ window.showToast = function (message, type = "success") {
 // add admin section
 
 // imports
-import { AuthService } from "./../auth/auth-logic.js";
-import { UserValidations, User } from "./../auth/User.js";
-import StorageManager from "../../utils/storage/storage-helper.js";
-import KEYS from "../../utils/keys.js";
 
 const storage = new StorageManager();
 
