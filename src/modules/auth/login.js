@@ -1,4 +1,3 @@
-// imports
 import { AuthService } from "./auth-logic.js";
 
 const loginForm = document.getElementById("loginForm");
@@ -28,7 +27,6 @@ loginForm.addEventListener("submit", (e) => {
       window.location.href = "../../index.html";
     }
   } catch (error) {
-    // messageEl.textContent = error.message;
-    console.error(error);
+    messageEl.textContent = error.message;
   }
 });

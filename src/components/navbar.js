@@ -10,11 +10,16 @@ export class Navbar {
       return;
     }
 
+    const isLoggedIn = this.checkAuth();
+    const authButton = isLoggedIn 
+      ? `<button class="btn-login" id="btn-logout" style="background-color: #dc3545; border-color: #dc3545;">Logout</button>`
+      : `<a href="${this.basePath}pages/auth/login.html" class="btn-login">Login</a>`;
+
     this.container.innerHTML = `
       <div class="container-fluid">
         <div class="navbar-brand">
           <span class="brand-icon">🔷</span>
-          <h1>ShopSmart</h1>
+          <h1>Lafyuu</h1>
         </div>
         
         <div class="navbar-search">
@@ -40,10 +45,33 @@ export class Navbar {
         </div>
 
         <div class="navbar-actions">
-          <button class="btn-login" disabled title="Login page - Coming soon">Login</button>
+          ${authButton}
         </div>
       </div>
     `;
+
+    if (isLoggedIn) {
+      const logoutBtn = document.getElementById("btn-logout");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => this.handleLogout());
+      }
+    }
+  }
+
+  checkAuth() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'session_user_id' && value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  handleLogout() {
+    document.cookie = 'session_user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = `${this.basePath}pages/auth/login.html`;
   }
 
   updateBadges(wishlistCount, cartCount) {
@@ -63,7 +91,7 @@ export function renderNavbar(containerId) {
     <div class="container-fluid">
       <div class="navbar-brand">
         <span class="brand-icon">🔷</span>
-        <h1>ShopSmart</h1>
+        <h1>Lafyuu</h1>
       </div>
       
       <div class="navbar-search">

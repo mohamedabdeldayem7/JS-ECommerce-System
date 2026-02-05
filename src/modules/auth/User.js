@@ -8,7 +8,6 @@ export class User {
     this.id = id || Date.now();
   }
 
-  // Validation Logic
   set firstName(value) {
     UserValidations.validateName(value);
     this._firstName = value;
