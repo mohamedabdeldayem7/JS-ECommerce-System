@@ -53,14 +53,9 @@ function loadData() {
   
   if (isUserLoggedIn()) {
     const userId = getCurrentUserId();
-    const wishlistKey = `wishlist_${userId}`;
-    const wishlistData = storage.get(wishlistKey) || { id: wishlistKey, usrID: userId, items: [] };
-    
-    if (wishlistData.items) {
-      wishlist = wishlistData.items.map(item => allProducts.find(p => p.id === item.pId)).filter(p => p);
-    } else {
-      wishlist = [];
-    }
+    const wishlists = storage.get("wishlists") || {};
+    const userWishlistIds = wishlists[userId] || [];
+    wishlist = userWishlistIds.map(id => allProducts.find(p => p.id === id)).filter(p => p);
   } else {
     wishlist = [];
   }
@@ -107,9 +102,9 @@ function displayProduct(product) {
   let isInWishlist = false;
   if (isUserLoggedIn()) {
     const userId = getCurrentUserId();
-    const wishlistKey = `wishlist_${userId}`;
-    const wishlistData = storage.get(wishlistKey) || { items: [] };
-    isInWishlist = wishlistData.items && wishlistData.items.some((item) => item.pId === product.id);
+    const wishlists = storage.get("wishlists") || {};
+    const userWishlistIds = wishlists[userId] || [];
+    isInWishlist = userWishlistIds.includes(product.id);
   }
   
   const rating = (Math.random() * (5 - 4) + 4).toFixed(1);
@@ -210,22 +205,22 @@ function addToCart(product) {
   if (product.stockQuantity === 0) return;
 
   const userId = getCurrentUserId();
-  const cartKey = `cart_${userId}`;
-  let cart = storage.get(cartKey) || { id: cartKey, usrID: userId, items: [] };
+  const carts = storage.get("carts") || {};
+  let userCart = carts[userId] || [];
   
-  if (!cart.items) {
-    cart = { id: cartKey, usrID: userId, items: [] };
-  }
-
-  const existingItem = cart.items.find((item) => item.pId === product.id);
+  const existingItem = userCart.find((item) => item.productId === product.id);
 
   if (existingItem) {
-    existingItem.qnt += 1;
+    existingItem.quantity += 1;
   } else {
-    cart.items.push({ pId: product.id, qnt: 1 });
+    userCart.push({ productId: product.id, quantity: 1 });
   }
 
-  storage.set(cartKey, cart);
+  carts[userId] = userCart;
+  storage.set("carts", carts);
+  
+  console.log("Cart saved:", { userId, cart: userCart, allCarts: carts });
+  
   updateCartCount();
   alert("Added to cart!");
 }
@@ -240,28 +235,28 @@ function toggleWishlist(productId) {
   if (!product) return;
 
   const userId = getCurrentUserId();
-  const wishlistKey = `wishlist_${userId}`;
-  let wishlistData = storage.get(wishlistKey) || { id: wishlistKey, usrID: userId, items: [] };
+  const wishlists = storage.get("wishlists") || {};
+  let userWishlistIds = wishlists[userId] || [];
   
-  if (!wishlistData.items) {
-    wishlistData = { id: wishlistKey, usrID: userId, items: [] };
-  }
+  const index = userWishlistIds.indexOf(productId);
 
-  const existingIndex = wishlistData.items.findIndex((item) => item.pId === productId);
-
-  if (existingIndex !== -1) {
-    wishlistData.items.splice(existingIndex, 1);
+  if (index !== -1) {
+    userWishlistIds.splice(index, 1);
   } else {
-    wishlistData.items.push({ pId: productId, qnt: 1 });
+    userWishlistIds.push(productId);
   }
   
-  storage.set(wishlistKey, wishlistData);
-  wishlist = wishlistData.items.map(item => allProducts.find(p => p.id === item.pId)).filter(p => p);
+  wishlists[userId] = userWishlistIds;
+  storage.set("wishlists", wishlists);
+  
+  console.log("Wishlist saved:", { userId, wishlist: userWishlistIds, allWishlists: wishlists });
+  
+  wishlist = userWishlistIds.map(id => allProducts.find(p => p.id === id)).filter(p => p);
   updateWishlistCount();
 
   const wishlistBtn = document.getElementById("btn-wishlist");
   const wishlistIcon = document.getElementById("wishlist-icon");
-  const isInWishlist = wishlistData.items.some((item) => item.pId === productId);
+  const isInWishlist = userWishlistIds.includes(productId);
 
   if (isInWishlist) {
     wishlistBtn.classList.add("active");
@@ -289,9 +284,9 @@ function updateCartCount() {
   }
 
   const userId = getCurrentUserId();
-  const cartKey = `cart_${userId}`;
-  const cart = storage.get(cartKey) || { items: [] };
-  const totalItems = cart.items ? cart.items.reduce((sum, item) => sum + (item.qnt || 0), 0) : 0;
+  const carts = storage.get("carts") || {};
+  const userCart = carts[userId] || [];
+  const totalItems = userCart.reduce((sum, item) => sum + item.quantity, 0);
   const cartCountBadge = document.getElementById("cart-count");
   if (cartCountBadge) {
     cartCountBadge.textContent = totalItems;

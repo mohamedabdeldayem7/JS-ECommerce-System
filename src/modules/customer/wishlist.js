@@ -3,10 +3,39 @@ import {
   removeFromWishlist,
   moveToCart
 } from "../../utils/storage/WishlistService.js";
+import { getCart } from "../../utils/storage/CartService.js";
+import { Navbar } from "../../components/navbar.js";
+import { Footer } from "../../components/footer.js";
 
-/* ===== PRODUCTS ===== */
 function getProducts() {
   return JSON.parse(localStorage.getItem("products")) || [];
+}
+
+function initializeNavbar() {
+  const navbar = new Navbar("navbar-container", "../../");
+  navbar.render();
+}
+
+function initializeFooter() {
+  const footer = new Footer("footer-container");
+  footer.render();
+  footer.updateYear();
+}
+
+function updateNavbarCounts() {
+  const wishlist = getWishlist();
+  const cart = getCart();
+  const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  
+  const wishlistBadge = document.getElementById("wishlist-count");
+  const cartBadge = document.getElementById("cart-count");
+  
+  if (wishlistBadge) {
+    wishlistBadge.textContent = wishlist.length;
+  }
+  if (cartBadge) {
+    cartBadge.textContent = totalCartItems;
+  }
 }
 
 function renderWishlist() {
@@ -21,6 +50,7 @@ function renderWishlist() {
 
   if (!wishlistIds.length) {
     empty.classList.remove("d-none");
+    updateNavbarCounts();
     return;
   }
 
@@ -47,7 +77,7 @@ function renderWishlist() {
 
         <div class="wishlist-body">
           <div class="wishlist-title">${product.name}</div>
-          <div class="wishlist-price">$${product.price}</div>
+          <div class="wishlist-price">${product.price}</div>
 
           <button
             class="btn btn-primary w-100 move-btn"
@@ -64,7 +94,6 @@ function renderWishlist() {
     grid.appendChild(col);
   });
 
-  /* EVENTS */
   document.querySelectorAll(".remove-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       removeFromWishlist(+btn.dataset.id);
@@ -78,6 +107,12 @@ function renderWishlist() {
       renderWishlist();
     });
   });
+  
+  updateNavbarCounts();
 }
 
-document.addEventListener("DOMContentLoaded", renderWishlist);
+document.addEventListener("DOMContentLoaded", () => {
+  initializeNavbar();
+  initializeFooter();
+  renderWishlist();
+});

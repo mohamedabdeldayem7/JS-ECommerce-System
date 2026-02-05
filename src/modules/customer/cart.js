@@ -4,13 +4,34 @@ import {
   calculateTotals,
   placeOrder
 } from "../../utils/storage/CartService.js";
+import { getWishlist } from "../../utils/storage/WishlistService.js";
+import { Navbar } from "../../components/navbar.js";
 
-/* ===== GET PRODUCTS ===== */
 function getProducts() {
   return JSON.parse(localStorage.getItem("products")) || [];
 }
 
-/* ===== UPDATE QUANTITY ===== */
+function initializeNavbar() {
+  const navbar = new Navbar("navbar-container", "../../");
+  navbar.render();
+}
+
+function updateNavbarCounts() {
+  const cart = getCart();
+  const wishlist = getWishlist();
+  const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  
+  const cartBadge = document.getElementById("cart-count");
+  const wishlistBadge = document.getElementById("wishlist-count");
+  
+  if (cartBadge) {
+    cartBadge.textContent = totalCartItems;
+  }
+  if (wishlistBadge) {
+    wishlistBadge.textContent = wishlist.length;
+  }
+}
+
 function updateQuantity(productId, type) {
 
   const cart = getCart();
@@ -38,20 +59,17 @@ function updateQuantity(productId, type) {
   renderCart();
 }
 
-/* ===== REMOVE ITEM ===== */
 function removeItem(productId) {
   const cart = getCart().filter(i => i.productId !== productId);
   saveCart(cart);
   renderCart();
 }
 
-/* ===== CLEAR CART ===== */
 function clearCart() {
   saveCart([]);
   renderCart();
 }
 
-/* ===== RENDER ===== */
 function renderCart() {
 
   const container = document.getElementById("cart-items");
@@ -68,6 +86,7 @@ function renderCart() {
     empty.classList.remove("d-none");
     summary.classList.add("d-none");
     count.textContent = "0 Items";
+    updateNavbarCounts();
     return;
   }
 
@@ -100,8 +119,8 @@ function renderCart() {
       </div>
 
       <div class="text-end">
-        <div>$${product.price} each</div>
-        <div class="price-total">$${(product.price * item.quantity).toFixed(2)}</div>
+        <div>${product.price} each</div>
+        <div class="price-total">${(product.price * item.quantity).toFixed(2)}</div>
         <button class="btn btn-link text-danger p-0"
           onclick="removeItem(${product.id})">
           <i class="bi bi-trash"></i>
@@ -114,15 +133,17 @@ function renderCart() {
 
   const totals = calculateTotals(cart);
 
-  document.getElementById("subtotal").textContent = `$${totals.subtotal.toFixed(2)}`;
-  document.getElementById("tax").textContent      = `$${totals.tax.toFixed(2)}`;
-  document.getElementById("total").textContent    = `$${totals.total.toFixed(2)}`;
+  document.getElementById("subtotal").textContent = `${totals.subtotal.toFixed(2)}`;
+  document.getElementById("tax").textContent      = `${totals.tax.toFixed(2)}`;
+  document.getElementById("total").textContent    = `${totals.total.toFixed(2)}`;
 
   count.textContent = cart.length + " Items";
+  updateNavbarCounts();
 }
 
-/* INIT */
 document.addEventListener("DOMContentLoaded", () => {
+  initializeNavbar();
+  initializeFooter();
   renderCart();
   document.getElementById("clear-cart").onclick = clearCart;
   document.getElementById("place-order").onclick = placeOrder;

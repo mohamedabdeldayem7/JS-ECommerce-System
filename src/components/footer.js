@@ -9,6 +9,8 @@ export class Footer {
       return;
     }
 
+    const currentYear = new Date().getFullYear();
+
     this.container.innerHTML = `
       <div class="footer-content">
         <div class="footer-brand">
@@ -21,7 +23,7 @@ export class Footer {
           <a href="#" class="footer-link">Help Center</a>
         </div>
       </div>
-      <p class="footer-copyright">© 2024 Lafyuu Inc. All rights reserved.</p>
+      <p class="footer-copyright">© ${currentYear} Lafyuu Inc. All rights reserved.</p>
     `;
   }
 
