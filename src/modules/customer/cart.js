@@ -2,7 +2,7 @@ import {
   getCart,
   saveCart,
   calculateTotals,
-  placeOrder
+  placeOrder,
 } from "../../utils/storage/CartService.js";
 import { getWishlist } from "../../utils/storage/WishlistService.js";
 import { Navbar } from "../../components/navbar.js";
@@ -20,10 +20,10 @@ function updateNavbarCounts() {
   const cart = getCart();
   const wishlist = getWishlist();
   const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  
+
   const cartBadge = document.getElementById("cart-count");
   const wishlistBadge = document.getElementById("wishlist-count");
-  
+
   if (cartBadge) {
     cartBadge.textContent = totalCartItems;
   }
@@ -33,13 +33,12 @@ function updateNavbarCounts() {
 }
 
 function updateQuantity(productId, type) {
-
   const cart = getCart();
-  const item = cart.find(i => i.productId === productId);
+  const item = cart.find((i) => i.productId === productId);
   if (!item) return;
 
   const products = getProducts();
-  const product = products.find(p => p.id === productId);
+  const product = products.find((p) => p.id === productId);
   if (!product) return;
 
   if (type === "inc") {
@@ -48,7 +47,7 @@ function updateQuantity(productId, type) {
     }
   } else {
     if (item.quantity === 1) {
-      const index = cart.findIndex(i => i.productId === productId);
+      const index = cart.findIndex((i) => i.productId === productId);
       cart.splice(index, 1);
     } else {
       item.quantity--;
@@ -60,7 +59,7 @@ function updateQuantity(productId, type) {
 }
 
 function removeItem(productId) {
-  const cart = getCart().filter(i => i.productId !== productId);
+  const cart = getCart().filter((i) => i.productId !== productId);
   saveCart(cart);
   renderCart();
 }
@@ -71,7 +70,6 @@ function clearCart() {
 }
 
 function renderCart() {
-
   const container = document.getElementById("cart-items");
   const empty = document.getElementById("empty-cart");
   const summary = document.getElementById("order-summary");
@@ -93,9 +91,8 @@ function renderCart() {
   empty.classList.add("d-none");
   summary.classList.remove("d-none");
 
-  cart.forEach(item => {
-
-    const product = products.find(p => p.id === item.productId);
+  cart.forEach((item) => {
+    const product = products.find((p) => p.id === item.productId);
     if (!product) return;
 
     const div = document.createElement("div");
@@ -133,9 +130,10 @@ function renderCart() {
 
   const totals = calculateTotals(cart);
 
-  document.getElementById("subtotal").textContent = `${totals.subtotal.toFixed(2)}`;
-  document.getElementById("tax").textContent      = `${totals.tax.toFixed(2)}`;
-  document.getElementById("total").textContent    = `${totals.total.toFixed(2)}`;
+  document.getElementById("subtotal").textContent =
+    `${totals.subtotal.toFixed(2)}`;
+  document.getElementById("tax").textContent = `${totals.tax.toFixed(2)}`;
+  document.getElementById("total").textContent = `${totals.total.toFixed(2)}`;
 
   count.textContent = cart.length + " Items";
   updateNavbarCounts();
@@ -143,7 +141,7 @@ function renderCart() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeNavbar();
-  initializeFooter();
+  // initializeFooter();
   renderCart();
   document.getElementById("clear-cart").onclick = clearCart;
   document.getElementById("place-order").onclick = placeOrder;

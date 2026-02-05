@@ -21,7 +21,7 @@ loginForm.addEventListener("submit", (e) => {
     const user = AuthService.login(email, password);
 
     if (user.role === "admin") {
-      window.location.href = "/JS-ECommerce-System/pages/admin/dashboard.html"
+      window.location.href = "../../../pages/admin/dashboard.html";
       // "../../../pages/admin/dashboard.html";
     } else {
       window.location.href = "../../index.html";

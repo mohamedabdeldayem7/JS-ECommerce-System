@@ -23,6 +23,7 @@ import FilterService from "./filterService.js";
 import { UserValidations, User } from "./../auth/User.js";
 import StorageManager from "../../utils/storage/storage-helper.js";
 import KEYS from "../../utils/keys.js";
+import { AuthService } from "../auth/auth-logic.js";
 
 // dummy data loader
 if (getAllCategories().length === 0) saveCategoriesDummy();
@@ -468,26 +469,37 @@ password.addEventListener("blur", function () {
   }
 });
 ///////
-document.addEventListener("DOMContentLoaded", () => {
-  const user = AuthService.checkAuth();
+// document.addEventListener("DOMContentLoaded", () => {
+//   const user = AuthService.checkAuth();
 
-  if (user) {
-    document.getElementById("adminName").textContent =
-      `${user.firstName} ${user.lastName}`;
+//   if (user) {
+//     document.getElementById("adminName").textContent =
+//       `${user.firstName} ${user.lastName}`;
 
-    document.getElementById("adminEmail").textContent = user.email;
-  } else {
-    AuthService.logout();
-  }
+//     document.getElementById("adminEmail").textContent = user.email;
+//   } else {
+//     AuthService.logout();
+//   }
 
-  const logoutBtn = document.getElementById("logoutMe");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
+//   const logoutBtn = document.getElementById("logoutMe");
+//   if (logoutBtn) {
+//     logoutBtn.addEventListener("click", (e) => {
+//       e.preventDefault();
 
-      if (confirm("Are you sure you want to logout?")) {
-        AuthService.logout();
-      }
-    });
-  }
-});
+//       if (confirm("Are you sure you want to logout?")) {
+//         AuthService.logout();
+//       }
+//     });
+//   }
+// });
+
+const logoutBtn = document.getElementById("logoutMe");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    if (confirm("Are you sure you want to logout?")) {
+      AuthService.logout();
+    }
+  });
+}
