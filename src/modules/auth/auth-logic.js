@@ -27,6 +27,7 @@ export class AuthService {
     const newUser = new User(firstName, lastName, email, password, "user");
     AuthService.storageManager.pushToItem(KEYS.USERS, newUser.toJSON());
     AuthService.storageManager.setCookie(KEYS.CURRENT_USER, newUser.id, 7);
+    AuthService.storageManager.set("currentUser", newUser.toJSON());
     return newUser;
   }
 
@@ -57,11 +58,13 @@ export class AuthService {
     }
 
     AuthService.storageManager.setCookie(KEYS.CURRENT_USER, user.id, 7);
+    AuthService.storageManager.set("currentUser", user);
     return user;
   }
 
   static logout() {
     AuthService.storageManager.eraseCookie(KEYS.CURRENT_USER);
+    localStorage.removeItem("currentUser");
     window.location.href = "../../../pages/auth/login.html";
   }
 

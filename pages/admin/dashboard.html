@@ -151,8 +151,9 @@
       <div class="mt-auto pt-4">
         <hr class="text-secondary opacity-25 mb-3" />
         <a
-          href="logout.html"
+          href="../auth/login.html"
           class="nav-link logout-link d-flex align-items-center gap-3 text-danger"
+          onclick="localStorage.removeItem('currentUser'); document.cookie = 'session_user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';"
         >
           <span class="material-symbols-rounded">logout</span>
           Logout

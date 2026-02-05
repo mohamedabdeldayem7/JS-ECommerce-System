@@ -3,6 +3,30 @@ import {
   getAllProducts,
   getStatusBadge
 } from "../../utils/storage/OrderService.js";
+import { getCart } from "../../utils/storage/CartService.js";
+import { getWishlist } from "../../utils/storage/WishlistService.js";
+import { Navbar } from "../../components/navbar.js";
+
+function initializeNavbar() {
+  const navbar = new Navbar("navbar-container", "../../");
+  navbar.render();
+}
+
+function updateNavbarCounts() {
+  const wishlist = getWishlist();
+  const cart = getCart();
+  const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  
+  const wishlistBadge = document.getElementById("wishlist-count");
+  const cartBadge = document.getElementById("cart-count");
+  
+  if (wishlistBadge) {
+    wishlistBadge.textContent = wishlist.length;
+  }
+  if (cartBadge) {
+    cartBadge.textContent = totalCartItems;
+  }
+}
 
 function renderOrders() {
 
@@ -36,7 +60,7 @@ function renderOrders() {
           ${order.status}
         </span>
       </td>
-      <td class="fw-bold text-primary">$${order.total}</td>
+      <td class="fw-bold text-primary">${order.total}</td>
       <td>
         <button
           class="btn btn-sm btn-outline-primary"
@@ -66,7 +90,7 @@ function renderOrders() {
                     <div class="text-muted">Quantity: ${item.quantity}</div>
                   </div>
                   <div class="fw-bold text-primary">
-                    $${(product.price * item.quantity).toFixed(2)}
+                    ${(product.price * item.quantity).toFixed(2)}
                   </div>
                 </div>
               `;
@@ -81,4 +105,9 @@ function renderOrders() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", renderOrders);
+document.addEventListener("DOMContentLoaded", () => {
+  initializeNavbar();
+  initializeFooter();
+  updateNavbarCounts();
+  renderOrders();
+});

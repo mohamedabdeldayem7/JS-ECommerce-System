@@ -33,12 +33,12 @@ export class Navbar {
 
         <div class="navbar-menu">
           <a href="${this.basePath}index.html" class="nav-link">Home</a>
-          <a href="${this.basePath}pages/customer/orders.html" class="nav-link">My Orders</a>
+          <a href="${this.basePath}pages/customer/my-orders.html" class="nav-link">My Orders</a>
           <a href="${this.basePath}pages/customer/wishlist.html" class="nav-link nav-link-with-badge">
             Wishlist
             <span class="nav-badge" id="wishlist-count">0</span>
           </a>
-          <a href="#" class="nav-link nav-link-with-badge">
+          <a href="${this.basePath}pages/customer/cart.html" class="nav-link nav-link-with-badge">
             Cart
             <span class="nav-badge" id="cart-count">0</span>
           </a>
