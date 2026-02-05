@@ -3,9 +3,16 @@ import {
   getAllProducts,
   getStatusBadge
 } from "../../utils/storage/OrderService.js";
+////////
+import StorageManager from "../../utils/storage/storage-helper.js";
+import KEYS from "../../utils/keys.js";
+///////
 import { getCart } from "../../utils/storage/CartService.js";
 import { getWishlist } from "../../utils/storage/WishlistService.js";
 import { Navbar } from "../../components/navbar.js";
+
+const storage = new StorageManager();
+
 
 function initializeNavbar() {
   const navbar = new Navbar("navbar-container", "../../");
@@ -27,13 +34,24 @@ function updateNavbarCounts() {
     cartBadge.textContent = totalCartItems;
   }
 }
-
+//////
 function renderOrders() {
 
   const container = document.getElementById("orders-container");
   const empty = document.getElementById("empty-orders");
 
-  const orders = getOrders();
+  // 🔽 NEW: get logged-in customerId from cookies
+  const customerId = storage.getCookie(KEYS.CURRENT_USER);
+
+  // 🔽 if no logged-in user, show empty state
+  if (!customerId) {
+    empty.classList.remove("d-none");
+    return;
+  }
+
+  // 🔽 MODIFIED: fetch orders for current customer only
+  const orders = getOrders(customerId);
+  /////////////////////
   const products = getAllProducts();
 
   container.innerHTML = "";
@@ -107,7 +125,8 @@ function renderOrders() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeNavbar();
-  initializeFooter();
+    // initializeFooter();
+
   updateNavbarCounts();
   renderOrders();
 });

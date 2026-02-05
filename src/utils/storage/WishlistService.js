@@ -2,12 +2,27 @@ const WISHLISTS_KEY = "wishlists";
 const CARTS_KEY = "carts";
 const CURRENT_USER_KEY = "currentUser";
 
+/* ===================== NEW ===================== */
+// ADDED: use cookies instead of localStorage for current user
+import StorageManager from "./storage-helper.js";
+import KEYS from "../keys.js";
+
+const storage = new StorageManager();
+/* ===================== END NEW ===================== */
+
+
 class WishlistService {
 
   /* ================= USER ================= */
 
   static getCurrentUser() {
-    return JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+
+    /* ===================== MODIFIED ===================== */
+    // MODIFIED: read current user id from cookies instead of localStorage
+    const userId = storage.getCookie(KEYS.CURRENT_USER);
+    if (!userId) return null;
+    return { id: userId };
+    /* ===================== END MODIFIED ===================== */
   }
 
   /* ================= WISHLISTS OBJECT ================= */
