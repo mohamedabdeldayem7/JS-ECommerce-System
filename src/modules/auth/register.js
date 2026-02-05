@@ -1,17 +1,15 @@
-// imports
 import { AuthService } from "./auth-logic.js";
 import { UserValidations } from "./User.js";
 
 const registrationForm = document.getElementById("registrationForm");
 const message = document.getElementById("message");
 
-// from inputs
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 const repeatPassword = document.getElementById("repeatPassword");
-// error-msg
+
 const firstNameError = document.getElementById("firstNameError");
 const lastNameError = document.getElementById("lastNameError");
 const emailError = document.getElementById("emailError");
@@ -40,7 +38,6 @@ registrationForm.addEventListener("submit", function (e) {
     }, 2000);
     registrationForm.reset();
   } catch (error) {
-    // message.textContent = "Can't complete Registration, Please check errors!";
     message.textContent = error.message;
     message.classList.add("text-danger");
   }
