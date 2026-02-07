@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Add Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        /* ===== Global Colors ===== */
+        :root {
+            --soft-blue: #2563eb;
+            --soft-blue-light: #eff6ff;
+            --soft-border: #e5e7eb;
+            --soft-bg: #f9fafb;
+        }
+
+        body {
+            background: linear-gradient(135deg, #eff6ff, #ffffff);
+            min-height: 100vh;
+        }
+
+        /* ===== Card ===== */
+        .soft-admin-card {
+            border-radius: 18px;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+        }
+
+        /* ===== Avatar ===== */
+        .avatar-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--soft-blue-light);
+            color: var(--soft-blue);
+            transition: all 0.3s ease;
+        }
+
+        /* ===== Form ===== */
+        .soft-form label {
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== Inputs ===== */
+        .soft-form .input-group {
+            border-radius: 14px;
+            overflow: hidden;
+            background-color: var(--soft-bg);
+            border: 1px solid var(--soft-border);
+            transition: all 0.3s ease;
+        }
+
+        .soft-form .input-group-text {
+            background: transparent;
+            border: none;
+            color: #6b7280;
+        }
+
+        .soft-form .form-control {
+            background: transparent;
+            border: none;
+            padding: 14px 12px;
+        }
+
+        .soft-form .form-control::placeholder {
+            color: #9ca3af;
+        }
+
+        .soft-form .input-group:focus-within {
+            border-color: var(--soft-blue);
+            background: #fff;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+        }
+
+        .soft-form .input-group:focus-within i {
+            color: var(--soft-blue);
+        }
+
+        /* ===== Password Strength ===== */
+        .progress {
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* ===== Role Cards ===== */
+        .role-card {
+            border-radius: 16px;
+            border: 1px solid var(--soft-border) !important;
+            background: #fff;
+            transition: all 0.25s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-check:checked+.role-card {
+            background: var(--soft-blue-light) !important;
+            border-color: var(--soft-blue) !important;
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* ===== Buttons ===== */
+        .soft-form .btn-primary {
+            background: var(--soft-blue);
+            border: none;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .soft-form .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.35);
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-5 d-flex justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card soft-admin-card border-0 shadow-lg position-relative overflow-hidden">
+                <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 6px"></div>
+
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <div class="position-relative d-inline-block">
+                            <div id="dynamicAvatar"
+                                class="avatar-circle fw-bold fs-2 d-flex align-items-center justify-content-center mb-3 mx-auto">
+                                <i class="bi bi-person-plus-fill"></i>
+                            </div>
+                            <span
+                                class="position-absolute bottom-0 end-0 bg-success p-2 rounded-circle border border-white"></span>
+                        </div>
+                        <h3 class="fw-bold text-dark">Create Admin Profile</h3>
+                        <p class="text-muted small">
+                            Enter the details to grant access rights.
+                        </p>
+                    </div>
+
+                    <form id="smartAdminForm" class="soft-form" novalidate>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control" id="adminName" placeholder="e.g. Eslam Araby"
+                                        oninput="updateAvatar(this.value)" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" class="form-control" id="adminEmail"
+                                        placeholder="user@shopease.com" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label small fw-bold text-secondary mb-0">Password</label>
+                                <a href="javascript:void(0)" onclick="generatePassword()"
+                                    class="small text-primary text-decoration-none fw-bold">
+                                    <i class="bi bi-magic"></i> Generate Secure
+                                </a>
+                            </div>
+
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="adminPass" placeholder="••••••••"
+                                    required minlength="8" />
+                                <span class="input-group-text cursor-pointer" onclick="togglePassVisibility()">
+                                    <i class="bi bi-eye-slash" id="toggleIcon"></i>
+                                </span>
+                            </div>
+
+                            <div class="progress mt-2" style="height: 4px">
+                                <div id="passStrengthBar" class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="form-label small fw-bold text-secondary">Access Role</label>
+                            <div class="role-selector d-flex gap-3">
+                                <input type="radio" class="btn-check" name="role" id="roleAdmin" checked />
+                                <label class="role-card w-100 p-3" for="roleAdmin">
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle me-3 d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-shield-check"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Admin</div>
+                                            <div class="small text-muted">
+                                                Can manage products & orders
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <input type="radio" class="btn-check" name="role" id="roleSuper" />
+                                <label class="role-card w-100 p-3" for="roleSuper">
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="icon-box bg-danger bg-opacity-10 text-danger rounded-circle me-3 d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-shield-lock"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Super Admin</div>
+                                            <div class="small text-muted">
+                                                Full access + Manage admins
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary py-3 fw-bold">
+                                Create Account
+                            </button>
+                            <button type="reset" class="btn btn-link text-muted text-decoration-none"
+                                onclick="resetAvatar()">
+                                Cancel & Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= JS (نفس اللي بعته) ================= -->
+    <script>
+        window.updateAvatar = function (name) {
+            const avatarEl = document.getElementById("dynamicAvatar");
+            if (name.trim() !== "") {
+                const initials = name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .substring(0, 2)
+                    .toUpperCase();
+                avatarEl.innerText = initials;
+                avatarEl.classList.add("bg-primary", "text-white");
+            } else {
+                resetAvatar();
+            }
+        };
+
+        window.resetAvatar = function () {
+            const avatarEl = document.getElementById("dynamicAvatar");
+            avatarEl.innerHTML = '<i class="bi bi-person-plus-fill"></i>';
+            avatarEl.classList.remove("bg-primary", "text-white");
+
+            const bar = document.getElementById("passStrengthBar");
+            bar.style.width = "0%";
+            bar.className = "progress-bar";
+        };
+
+        window.generatePassword = function () {
+            const chars =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let password = "";
+            for (let i = 0; i < 12; i++) {
+                password += chars[Math.floor(Math.random() * chars.length)];
+            }
+            const passInput = document.getElementById("adminPass");
+            passInput.value = password;
+            passInput.type = "text";
+            document.getElementById("toggleIcon").className = "bi bi-eye";
+            checkStrength(password);
+        };
+
+        window.togglePassVisibility = function () {
+            const passInput = document.getElementById("adminPass");
+            const icon = document.getElementById("toggleIcon");
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                icon.className = "bi bi-eye";
+            } else {
+                passInput.type = "password";
+                icon.className = "bi bi-eye-slash";
+            }
+        };
+
+        document
+            .getElementById("adminPass")
+            .addEventListener("input", function (e) {
+                checkStrength(e.target.value);
+            });
+
+        function checkStrength(password) {
+            const bar = document.getElementById("passStrengthBar");
+            let strength = 0;
+            if (password.length > 5) strength += 30;
+            if (/[A-Z]/.test(password)) strength += 20;
+            if (/[0-9]/.test(password)) strength += 20;
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 30;
+
+            bar.style.width = strength + "%";
+            if (strength < 50) bar.className = "progress-bar bg-danger";
+            else if (strength < 80) bar.className = "progress-bar bg-warning";
+            else bar.className = "progress-bar bg-success";
+        }
+
+        document
+            .getElementById("smartAdminForm")
+            .addEventListener("submit", function (e) {
+                e.preventDefault();
+                alert("Admin account created successfully!");
+                this.reset();
+                resetAvatar();
+            });
+    </script>
+</body>
+
+</html>
