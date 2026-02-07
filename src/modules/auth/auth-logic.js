@@ -64,7 +64,7 @@ export class AuthService {
 
   static logout() {
     AuthService.storageManager.eraseCookie(KEYS.CURRENT_USER);
-    localStorage.removeItem("currentUser");
+    AuthService.storageManager.remove("currentUser");
     window.location.href = "../../../pages/auth/login.html";
   }
 
@@ -72,11 +72,5 @@ export class AuthService {
     const user = AuthService.storageManager.getCookie(KEYS.CURRENT_USER);
     if (user === null) return null;
     return user;
-    const cart = storageManager.get(KEYS.CART) || [];
-    const cusCart = cart.find((c) => c.user_id === user.id);
-    cusCart.items.push = {
-      itemQnt: 4,
-      itemId: prod.id,
-    };
   }
 }

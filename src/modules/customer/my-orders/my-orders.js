@@ -1,11 +1,13 @@
-import {
-  getOrders,
-  getAllProducts,
-  getStatusBadge
-} from "../../utils/storage/OrderService.js";
-import { getCart } from "../../utils/storage/CartService.js";
-import { getWishlist } from "../../utils/storage/WishlistService.js";
-import { Navbar } from "../../components/navbar.js";
+import { getOrders, getAllProducts, getStatusBadge } from "./OrderService.js";
+////////
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
+///////
+import { getCart } from "../cart/CartService.js";
+import { getWishlist } from "../wishlist/WishlistService.js";
+import { Navbar } from "../../../components/navbar.js";
+
+const storage = new StorageManager();
 
 function initializeNavbar() {
   const navbar = new Navbar("navbar-container", "../../");
@@ -16,10 +18,10 @@ function updateNavbarCounts() {
   const wishlist = getWishlist();
   const cart = getCart();
   const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  
+
   const wishlistBadge = document.getElementById("wishlist-count");
   const cartBadge = document.getElementById("cart-count");
-  
+
   if (wishlistBadge) {
     wishlistBadge.textContent = wishlist.length;
   }
@@ -27,13 +29,23 @@ function updateNavbarCounts() {
     cartBadge.textContent = totalCartItems;
   }
 }
-
+//////
 function renderOrders() {
-
   const container = document.getElementById("orders-container");
   const empty = document.getElementById("empty-orders");
 
-  const orders = getOrders();
+  // 🔽 NEW: get logged-in customerId from cookies
+  const customerId = storage.getCookie(KEYS.CURRENT_USER);
+
+  // 🔽 if no logged-in user, show empty state
+  if (!customerId) {
+    empty.classList.remove("d-none");
+    return;
+  }
+
+  // 🔽 MODIFIED: fetch orders for current customer only
+  const orders = getOrders(customerId);
+  /////////////////////
   const products = getAllProducts();
 
   container.innerHTML = "";
@@ -45,8 +57,7 @@ function renderOrders() {
 
   empty.classList.add("d-none");
 
-  orders.forEach(order => {
-
+  orders.forEach((order) => {
     const detailsId = `details-${order.id}`;
     const badge = getStatusBadge(order.status);
 
@@ -77,12 +88,12 @@ function renderOrders() {
       <td colspan="5" class="p-0">
         <div class="collapse bg-light" id="${detailsId}">
           <div class="p-4">
-            ${order.items.map(item => {
+            ${order.items
+              .map((item) => {
+                const product = products.find((p) => p.id == item.productId);
+                if (!product) return "";
 
-              const product = products.find(p => p.id == item.productId);
-              if (!product) return "";
-
-              return `
+                return `
                 <div class="order-product">
                   <img src="${product.image}">
                   <div class="flex-grow-1">
@@ -94,7 +105,8 @@ function renderOrders() {
                   </div>
                 </div>
               `;
-            }).join("")}
+              })
+              .join("")}
           </div>
         </div>
       </td>
@@ -107,7 +119,8 @@ function renderOrders() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeNavbar();
-  initializeFooter();
+  // initializeFooter();
+
   updateNavbarCounts();
   renderOrders();
 });
