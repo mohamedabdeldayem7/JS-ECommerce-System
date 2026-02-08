@@ -4,6 +4,7 @@ const KEYS = {
   PRODUCT: "products",
   CART: "carts",
   ORDERS: "orders",
+  WISHLIST: "wishlist",
 };
 
 export default KEYS;
