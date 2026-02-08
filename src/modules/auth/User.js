@@ -79,7 +79,7 @@ export class UserValidations {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.*]{6,}$/;
     if (!regex.test(password)) {
       throw new Error(
-        "Password too weak: Must include Uppercase, Lowercase, Number, and Special Character (Min 6 chars).",
+        "Password too weak: Must include Uppercase, Lowercase and Special Character (Min 6 chars).",
       );
     }
     return true;

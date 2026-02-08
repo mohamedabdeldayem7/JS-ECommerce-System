@@ -39,41 +39,47 @@
   
           <div id="message" class="error-msg"></div>
   
-          <form id="registrationForm">
-  
+          <form id="registrationForm" novalidate>
+          
             <div class="input-box">
               <input type="text" id="firstName" required />
-              <label>First Name</label>
+              <label for="firstName">First Name</label>
+              <small id="firstNameError" class="text-danger"></small>
             </div>
-  
+          
             <div class="input-box">
               <input type="text" id="lastName" required />
-              <label>Last Name</label>
+              <label for="lastName">Last Name</label>
+              <small id="lastNameError" class="text-danger"></small>
             </div>
-  
+          
             <div class="input-box">
               <input type="email" id="email" required />
-              <label>Email</label>
+              <label for="email">Email</label>
+              <small id="emailError" class="text-danger"></small>
             </div>
-  
+          
             <div class="input-box">
-              <input type="password" id="password" required />
-              <label>Password</label>
+              <input type="password" id="password"  required />
+              <label for="password">Password</label>
+              <small id="passwordError" class="text-danger"></small>
             </div>
-  
+          
             <div class="input-box">
               <input type="password" id="repeatPassword" required />
-              <label>Repeat Password</label>
+              <label for="repeatPassword">Repeat Password</label>
+              <small id="repeatPasswordError" class="text-danger"></small>
             </div>
-  
+          
             <button type="submit" class="login-btn">Register</button>
-  
+          
             <p class="register-link">
               Already have an account?
               <a href="login.html">Login</a>
             </p>
-  
+          
           </form>
+
         </div>
   
       </div>

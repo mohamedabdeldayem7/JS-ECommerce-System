@@ -103,3 +103,19 @@ repeatPassword.addEventListener("blur", function () {
     repeatPasswordError.innerText = "Passwords do not match!";
   }
 });
+const inputs = document.querySelectorAll(".input-box input");
+
+inputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    if (input.value.trim() !== "") {
+      input.classList.add("has-value");
+    } else {
+      input.classList.remove("has-value");
+    }
+  });
+
+  // لو فيه قيمة بعد reload
+  if (input.value.trim() !== "") {
+    input.classList.add("has-value");
+  }
+});

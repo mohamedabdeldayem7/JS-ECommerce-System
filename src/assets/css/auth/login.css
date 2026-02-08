@@ -105,13 +105,13 @@
 
 .input-box input:focus+label,
 .input-box input:valid+label {
-    top: -8px;
+    top: 0px;
     font-size: 12px;
     padding: 2px 8px;
     border-radius: 6px;
 
     /* نفس لون الخلفية */
-    background: linear-gradient(135deg, #eeeeee00, #eef4ff00);
+    background: linear-gradient(135deg, #fdfeff, #fdfeff);
     color: #2563eb;
 }
 
