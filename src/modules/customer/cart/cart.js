@@ -6,6 +6,7 @@ import {
 } from "./CartService.js";
 import { getWishlist } from "../wishlist/WishlistService.js";
 import { Navbar } from "../../../components/navbar.js";
+import { Footer } from "../../../components/footer.js";
 
 /* ===================== NEW IMPORT ===================== */
 // ADDED: read current user id from cookies (same as orders & wishlist)
@@ -22,6 +23,12 @@ function getProducts() {
 function initializeNavbar() {
   const navbar = new Navbar("navbar-container", "../../");
   navbar.render();
+}
+
+function initializeFooter() {
+  const footer = new Footer("footer-container");
+  footer.render();
+  footer.updateYear();
 }
 
 function updateNavbarCounts() {
@@ -163,7 +170,7 @@ function renderCart() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeNavbar();
-  // initializeFooter();
+  initializeFooter();
   renderCart();
   document.getElementById("clear-cart").onclick = clearCart;
   document.getElementById("place-order").onclick = placeOrder;

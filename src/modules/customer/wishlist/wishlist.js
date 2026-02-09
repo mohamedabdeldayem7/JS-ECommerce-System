@@ -136,6 +136,6 @@ function renderWishlist() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeNavbar();
-    // initializeFooter();
+  initializeFooter();
   renderWishlist();
 });

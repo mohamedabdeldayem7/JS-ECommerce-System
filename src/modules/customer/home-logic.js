@@ -74,6 +74,14 @@ function isUserLoggedIn() {
   return getCurrentUserId() !== null;
 }
 
+function checkAdminRedirect() {
+  const currentUser = storage.get("currentUser");
+  if (currentUser && currentUser.role === "admin") {
+    alert("Admin users should use the admin dashboard!");
+    window.location.href = "pages/auth/login.html";
+  }
+}
+
 const productsContainer = document.getElementById("products-container");
 const emptyState = document.getElementById("empty-state");
 const categoryTitle = document.getElementById("category-title");
@@ -94,6 +102,7 @@ let currentFilters = {
 let filterComponent;
 
 function init() {
+  checkAdminRedirect();
   initializeNavbar();
   loadData();
   initializeFilter();
@@ -313,6 +322,7 @@ function createProductCard(product) {
 
 function toggleWishlist(productId) {
   if (!isUserLoggedIn()) {
+    alert("You should Login FIRST");
     window.location.href = "pages/auth/login.html";
     return;
   }
@@ -366,6 +376,7 @@ function toggleWishlist(productId) {
 
 function addToCart(product) {
   if (!isUserLoggedIn()) {
+    alert("You should Login FIRST");
     window.location.href = "pages/auth/login.html";
     return;
   }

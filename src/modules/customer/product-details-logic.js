@@ -198,6 +198,7 @@ function createRelatedProductCard(product) {
 
 function addToCart(product) {
   if (!isUserLoggedIn()) {
+    alert("You should Login FIRST");
     window.location.href = "../../pages/auth/login.html";
     return;
   }
@@ -227,6 +228,7 @@ function addToCart(product) {
 
 function toggleWishlist(productId) {
   if (!isUserLoggedIn()) {
+    alert("You should Login FIRST");
     window.location.href = "../../pages/auth/login.html";
     return;
   }
