@@ -22,6 +22,9 @@ registrationForm.addEventListener("submit", function (e) {
   try {
     console.log("try brfore register fun");
 
+    if (password.value !== repeatPassword.value) {
+      throw new Error("Passwords do not match!");
+    }
     AuthService.register(
       firstName.value,
       lastName.value,
