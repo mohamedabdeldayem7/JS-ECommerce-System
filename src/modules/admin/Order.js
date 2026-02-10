@@ -161,71 +161,102 @@ window.rejectOrder = function (orderId) {
   }
 };
 
-// function updateOrderStatus(orderId, newStatus) {
-//   let orders = getOrders();
+// window.confirmOrder = function (orderId) {
+//   const ord = getOrders();
+//   const products = getAllProducts();
+//   const orderIndex = ord.findIndex((o) => o.id === orderId);
 
-//   orders = orders.map((order) => {
-//     if (order.id === orderId) {
-//       return { ...order, status: newStatus };
+//   if (orderIndex !== -1) {
+//     const currentOrder = ord[orderIndex];
+
+//     currentOrder.items.forEach((orderItem) => {
+//       const productInStock = products.find((p) => p.id === orderItem.productId);
+
+//       if (productInStock) {
+//         // check if the product is available
+//         if (productInStock.stockQuantity >= orderItem.quantity) {
+//           productInStock.stockQuantity -= orderItem.quantity;
+//         } else {
+//           productInStock.stockQuantity = 0;
+//           console.warn(`the product ${productInStock.name} is out of stock`);
+//         }
+//       }
+//     });
+
+//     ord[orderIndex].status = "confirmed";
+
+//     storageManager.set("orders", ord);
+//     storageManager.set("products", products);
+//     const row = document.getElementById(`row-${orderId}`);
+//     if (row) {
+//       // تغيير الـ status
+//       const badge = row.querySelector(".status-badge");
+//       badge.textContent = "confirmed";
+//       badge.className = "status-badge bg-success text-white";
+
+//       const actionsTd = row.querySelector("td:last-child");
+//       actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
 //     }
-//     return order;
-//   });
 
-//   storageManager.set("orders", orders);
+//     updateOrdersCount();
+//   }
+// };
 
-//   const row = storageManager.get(`row-${orderId}`);
-//   if (row) row.remove();
-
-//   updateOrdersCount();
-// }
-
+// -----------------------------------------
+// اظها عدد الاوردار ف ال cart و order اللي ف السايد بار
 window.confirmOrder = function (orderId) {
   const ord = getOrders();
   const products = getAllProducts();
   const orderIndex = ord.findIndex((o) => o.id === orderId);
 
-  if (orderIndex !== -1) {
-    const currentOrder = ord[orderIndex];
+  if (orderIndex === -1) return;
 
-    currentOrder.items.forEach((orderItem) => {
-      const productInStock = products.find((p) => p.id === orderItem.productId);
+  const currentOrder = ord[orderIndex];
 
-      if (productInStock) {
-        // check if the product is available
-        if (productInStock.stockQuantity >= orderItem.quantity) {
-          productInStock.stockQuantity -= orderItem.quantity;
-        } else {
-          // productInStock.stockQuantity = 0;
-          console.warn(`the product ${productInStock.name} is out of stock`);
-        }
-      }
-    });
+  let canConfirm = true;
 
-    ord[orderIndex].status = "confirmed";
+  currentOrder.items.forEach((orderItem) => {
+    const productInStock = products.find((p) => p.id === orderItem.productId);
 
-    storageManager.set("orders", ord);
-    storageManager.set("products", products);
-    const row = document.getElementById(`row-${orderId}`);
-    if (row) {
-      // تغيير الـ status
-      const badge = row.querySelector(".status-badge");
-      badge.textContent = "confirmed";
-      badge.className = "status-badge bg-success text-white";
-
-      const actionsTd = row.querySelector("td:last-child");
-      actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
+    if (!productInStock || productInStock.stockQuantity < orderItem.quantity) {
+      canConfirm = false;
     }
+  });
 
-    updateOrdersCount();
+  if (!canConfirm) {
+    alert("❌ Cannot confirm: One or more products are out of stock!");
+    return;
   }
+
+  currentOrder.items.forEach((orderItem) => {
+    const productInStock = products.find((p) => p.id === orderItem.productId);
+
+    if (productInStock) {
+      productInStock.stockQuantity -= orderItem.quantity;
+    }
+  });
+
+  ord[orderIndex].status = "confirmed";
+
+  storageManager.set("orders", ord);
+  storageManager.set("products", products);
+
+  const row = document.getElementById(`row-${orderId}`);
+  if (row) {
+    const badge = row.querySelector(".status-badge");
+    badge.textContent = "Confirmed";
+    badge.className = "status-badge bg-success text-white";
+
+    const actionsTd = row.querySelector("td:last-child");
+    actionsTd.innerHTML = `<span class="text-muted">No Actions</span>`;
+  }
+
+  updateOrdersCount();
 };
 
-// -----------------------------------------
-// اظها عدد الاوردار ف ال cart و order اللي ف السايد بار
 function updateOrdersCount() {
   const orders = getOrders();
 
-  // ال  card
   const totalCount = orders.length;
 
   const totalOrdersElement = document.getElementById("total-orders-count");
@@ -243,22 +274,3 @@ function updateOrdersCount() {
     sidebarBadge.style.display = pendingCount > 0 ? "inline-block" : "none";
   }
 }
-
-// const order = {
-//   customerId: 2,
-//   date: "2026-02-02",
-//   id: "o1770069661434",
-//   items: [
-//     { productId: 2, quantity: 2 },
-//     { productId: 2, quantity: 2 },
-//   ],
-//   status: "pending",
-//   total: 500,
-// };
-
-// order.items.forEach((it) => {
-//   const prod = getProductById(it.productId);
-//   if (prod.setStockQuantity >= it.quantity)
-//     prod.setStockQuantity -= it.quantity;
-//   else console.error("blablabla");
-// });

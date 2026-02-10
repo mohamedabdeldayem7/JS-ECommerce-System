@@ -65,7 +65,8 @@ export class AuthService {
   static logout() {
     AuthService.storageManager.eraseCookie(KEYS.CURRENT_USER);
     AuthService.storageManager.remove("currentUser");
-    window.location.href = "../../../pages/auth/login.html";
+    // window.location.href = "../../../pages/auth/login.html";
+    window.location.href="/JS-ECommerce-System/pages/auth/login.html"
   }
 
   static checkAuth() {

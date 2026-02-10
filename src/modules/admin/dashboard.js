@@ -522,3 +522,26 @@ setInterval(() => {
     window.location.href = "../../../pages/auth/login.html";
   }
 }, 500);
+//footer
+document.addEventListener("DOMContentLoaded", () => {
+
+  renderAdminFooter(); 
+});
+
+function renderAdminFooter() {
+  const footerContainer = document.getElementById("footerContainer");
+  
+  if (footerContainer) {
+    footerContainer.classList.remove("footer"); 
+    
+   
+    footerContainer.classList.add("admin-footer");
+
+   
+    footerContainer.innerHTML = `
+      <div style="text-align: center; padding: 30px 20px; color: #7e8993; font-size: 14px; border-top: 1px solid #dee2e6;">
+        &copy; 2026 Lafyuu Admin Panel. All rights reserved.
+      </div>
+    `;
+  }
+}
