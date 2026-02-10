@@ -195,7 +195,7 @@ window.confirmOrder = function (orderId) {
         if (productInStock.stockQuantity >= orderItem.quantity) {
           productInStock.stockQuantity -= orderItem.quantity;
         } else {
-          productInStock.stockQuantity = 0;
+          // productInStock.stockQuantity = 0;
           console.warn(`the product ${productInStock.name} is out of stock`);
         }
       }

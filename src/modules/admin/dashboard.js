@@ -517,5 +517,8 @@ setInterval(() => {
       alert("you cannot reach this page..!");
       window.location.href = "../../../pages/auth/login.html";
     }
+  } else {
+    alert("you cannot reach this page..!");
+    window.location.href = "../../../pages/auth/login.html";
   }
 }, 500);
