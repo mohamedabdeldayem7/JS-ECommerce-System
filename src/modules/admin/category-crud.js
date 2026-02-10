@@ -14,9 +14,19 @@ export function getCategoryById(id) {
   return getAllCategories().find((c) => c.id === id);
 }
 
+function checkCatName(catName) {
+  getAllCategories().forEach((c) => {
+    if (c.name.toLowerCase() === catName.toLowerCase()) {
+      throw new Error(
+        "This Category already exist .. try with another category title.",
+      );
+    }
+  });
+  return true;
+}
 export function saveCategory(category) {
   const categories = getAllCategories();
-
+  checkCatName(category.name);
   if (getCategoryById(category.id)) {
     categories.forEach((c) => {
       if (c.id === category.id) {

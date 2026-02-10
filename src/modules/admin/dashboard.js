@@ -121,44 +121,46 @@ productForm.onsubmit = function (e) {
   const imageInput = document.getElementById("pImage").value;
   const descriptionInput = document.getElementById("pDes").value;
   const prodCategory = document.getElementById("prodCategory");
-
-  const category = getAllCategories().find(
-    (c) => c.name === prodCategory.value,
-  );
-
-  console.log("price from modal", typeof priceInput);
-
-  let product,
-    flag = true;
-
-  if (idInput) {
-    product = new Product(
-      nameInput,
-      descriptionInput,
-      category.id,
-      imageInput,
-      priceInput,
-      stockInput,
-      [],
-      idInput,
+  try {
+    const category = getAllCategories().find(
+      (c) => c.name === prodCategory.value,
     );
-    flag = false;
-  } else {
-    product = new Product(
-      nameInput,
-      descriptionInput,
-      category.id,
-      imageInput,
-      priceInput,
-      stockInput,
-      [],
-    );
+
+    console.log("price from modal", typeof priceInput);
+    let product,
+      flag = true;
+
+    if (idInput) {
+      product = new Product(
+        nameInput,
+        descriptionInput,
+        category.id,
+        imageInput,
+        priceInput,
+        stockInput,
+        [],
+        idInput,
+      );
+      flag = false;
+    } else {
+      product = new Product(
+        nameInput,
+        descriptionInput,
+        category.id,
+        imageInput,
+        priceInput,
+        stockInput,
+        [],
+      );
+    }
+    saveProduct(product);
+    let alertMsg = flag ? "added" : "modified";
+    alert(`Product with name "${product.name}" ${alertMsg} successfully`);
+    productModal.hide();
+    changePage(1);
+  } catch (e) {
+    alert(e.message);
   }
-  saveProduct(product);
-  let alertMsg = flag ? "added" : "modified";
-  alert(`Product with name "${product.name}" ${alertMsg} successfully`);
-  productModal.hide();
-  changePage(1);
 };
 
 // search ,filter and sort
@@ -304,24 +306,29 @@ window.openEditCategoryModal = function (id) {
 // submit product form
 categoryForm.onsubmit = function (e) {
   e.preventDefault();
+  try {
+    const idInput = parseInt(document.getElementById("editCategoryId").value);
+    const nameInput = document.getElementById("catName").value;
+    const descriptionInput = document.getElementById("catDesc").value;
 
-  const idInput = parseInt(document.getElementById("editCategoryId").value);
-  const nameInput = document.getElementById("catName").value;
-  const descriptionInput = document.getElementById("catDesc").value;
+    let category,
+      flag = true;
 
-  let category,
-    flag = true;
+    if (idInput) {
+      category = new Category(nameInput, descriptionInput, idInput);
+      flag = false;
+    } else {
+      category = new Category(nameInput, descriptionInput);
+    }
 
-  if (idInput) {
-    category = new Category(nameInput, descriptionInput, idInput);
-    flag = false;
-  } else {
-    category = new Category(nameInput, descriptionInput);
+    saveCategory(category);
+
+    categoryModal.hide();
+    let alertMsg = flag ? "added" : "modified";
+    alert(`Category with name "${category.name}" ${alertMsg} successfully`);
+  } catch (e) {
+    alert(e.message);
   }
-  saveCategory(category);
-  categoryModal.hide();
-  let alertMsg = flag ? "added" : "modified";
-  alert(`Category with name "${category.name}" ${alertMsg} successfully`);
 };
 
 window.deleteCategory = function (id) {
