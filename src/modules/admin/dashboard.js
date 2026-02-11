@@ -398,7 +398,7 @@ window.resetAvatar = function () {
 
 window.generatePassword = function () {
   const regex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.*]{6,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.* ]{6,}$/;
 
   const chars =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
@@ -587,12 +587,13 @@ password.addEventListener("blur", function () {
 
 // logout section
 const cUser = storage.get("currentUser");
-document.getElementById("p-avatar").textContent =
-  cUser.firstName.toUpperCase()[0];
-document.getElementById("p-name").textContent =
-  cUser.firstName + " " + cUser.lastName;
-document.getElementById("p-role").textContent = cUser.role;
-
+if (cUser) {
+  document.getElementById("p-avatar").textContent =
+    cUser.firstName.toUpperCase()[0];
+  document.getElementById("p-name").textContent =
+    cUser.firstName + " " + cUser.lastName;
+  document.getElementById("p-role").textContent = cUser.role;
+}
 const logoutBtn = document.getElementById("logoutMe");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", (e) => {
