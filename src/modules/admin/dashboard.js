@@ -343,7 +343,8 @@ setInterval(() => {
   products.forEach((p) => {
     inventoryValue += p.getPrice * p.getStockQuantity;
   });
-  document.getElementById("inventoryValue").textContent = inventoryValue;
+  document.getElementById("inventoryValue").textContent =
+    parseInt(inventoryValue);
   document.getElementById("totalProd").textContent = products.length;
   document.getElementById("lowStockProd").textContent = products.filter(
     (p) => p.getStockQuantity < 140,
