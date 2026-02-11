@@ -109,21 +109,29 @@ body {
 /* الأخضر (Sales) */
 .stat-card.type-success::before {
   background-color: #198754;
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--shadow-md);
 }
 
 /* الأزرق (Orders) */
 .stat-card.type-primary::before {
   background-color: #0d6efd;
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--shadow-md);
 }
 
 /* السماوي (Products) */
 .stat-card.type-info::before {
   background-color: #0dcaf0;
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--shadow-md);
 }
 
 /* الأحمر (Low Stock) */
 .stat-card.type-danger::before {
   background-color: #dc3545;
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--shadow-md);
 }
 /* end eidte */
 
