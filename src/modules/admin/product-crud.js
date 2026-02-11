@@ -26,8 +26,6 @@ function checkProdName(prodName) {
 export function saveProduct(product) {
   const products = getAllProducts();
 
-  checkProdName(product.name);
-
   if (getProductById(product.id)) {
     products.forEach((p) => {
       if (p.id === product.id) {
@@ -40,6 +38,8 @@ export function saveProduct(product) {
       }
     });
   } else {
+    checkProdName(product.name);
+
     products.push(product);
   }
 

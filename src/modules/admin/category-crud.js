@@ -26,7 +26,6 @@ function checkCatName(catName) {
 }
 export function saveCategory(category) {
   const categories = getAllCategories();
-  checkCatName(category.name);
   if (getCategoryById(category.id)) {
     categories.forEach((c) => {
       if (c.id === category.id) {
@@ -35,6 +34,8 @@ export function saveCategory(category) {
       }
     });
   } else {
+    checkCatName(category.name);
+
     categories.push(category);
   }
 
