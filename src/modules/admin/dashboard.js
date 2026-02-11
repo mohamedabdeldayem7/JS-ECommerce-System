@@ -605,11 +605,13 @@ if (logoutBtn) {
 }
 
 setInterval(() => {
-  if (!AuthService.isAuthorized("admin")) {
-    alert("you cannot reach this page..!");
-    window.location.href = "../../../pages/auth/login.html";
-  }
-}, 500);
+  setTimeout(() => {
+    if (!AuthService.isAuthorized("admin")) {
+      alert("you cannot reach this page..!");
+      window.location.href = "../../../pages/auth/login.html";
+    }
+  }, 100);
+}, 1000);
 
 //footer
 document.addEventListener("DOMContentLoaded", () => {
