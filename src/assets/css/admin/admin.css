@@ -342,6 +342,67 @@ body {
   font-size: 0.9rem;
 }
 /* end Categories section style */
+/* start Admin section style */
+/* add admin section */
+/* Avatar Styling */
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* Inputs Styling */
+.input-group-text {
+  border-color: #f3f4f6;
+}
+.form-control {
+  border-color: #f3f4f6;
+}
+.form-control:focus {
+  box-shadow: none;
+  background-color: #fff !important;
+  border-color: var(--primary-color);
+}
+.form-control:focus + .input-group-text,
+.input-group-text:has(+ .form-control:focus) {
+  border-color: var(--primary-color);
+  color: var(--primary-color) !important;
+  background-color: #fff !important;
+}
+
+.role-card {
+  transition: all 0.2s ease;
+  border-color: #f3f4f6 !important;
+}
+.role-card:hover {
+  transform: translateY(-2px);
+  background-color: #f9fafb;
+}
+.btn-check:checked + .role-card {
+  border-color: var(--primary-color) !important;
+  background-color: #eff6ff !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+.icon-box {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hover-scale {
+  transition: transform 0.2s;
+}
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+/* end add admin section */
+/* end Admin section style */
 /* end section style */
 
 /* end main section style */

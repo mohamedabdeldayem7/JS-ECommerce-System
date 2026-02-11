@@ -371,13 +371,88 @@ window.showToast = function (message, type = "success") {
 };
 
 // add admin section
+window.updateAvatar = function (name) {
+  const avatarEl = document.getElementById("dynamicAvatar");
+  if (name.trim() !== "") {
+    const initials = name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+    avatarEl.innerText = initials;
+    avatarEl.classList.remove("bg-opacity-10", "text-primary");
+    avatarEl.classList.add("bg-primary", "text-white");
+  } else {
+    resetAvatar();
+  }
+};
 
-// imports
+window.resetAvatar = function () {
+  const avatarEl = document.getElementById("dynamicAvatar");
+  avatarEl.innerHTML = '<i class="bi bi-person-plus-fill"></i>';
+  avatarEl.classList.add("bg-opacity-10", "text-primary");
+  avatarEl.classList.remove("bg-primary", "text-white");
+};
 
+window.generatePassword = function () {
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.*]{6,}$/;
+
+  const chars =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+  let password = "";
+  do {
+    password = "";
+    for (let i = 0; i < 12; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      password += chars[randomIndex];
+    }
+  } while (!regex.test(password));
+  const passInput = document.getElementById("password");
+  passInput.value = password;
+  passInput.type = "text";
+  document.getElementById("toggleIcon").textContent = "visibility_off";
+
+  checkStrength(password);
+};
+
+window.togglePassVisibility = function () {
+  const passInput = document.getElementById("password");
+  const icon = document.getElementById("toggleIcon");
+  if (passInput.type === "password") {
+    passInput.type = "text";
+    icon.textContent = "visibility_off";
+  } else {
+    passInput.type = "password";
+    icon.textContent = "visibility";
+  }
+};
+
+document.getElementById("password").addEventListener("input", function (e) {
+  checkStrength(e.target.value);
+});
+
+function checkStrength(password) {
+  const bar = document.getElementById("passStrengthBar");
+  let strength = 0;
+  if (password.length > 5) strength += 30;
+  if (password.match(/[A-Z]/)) strength += 20;
+  if (password.match(/[0-9]/)) strength += 20;
+  if (password.match(/[^a-zA-Z0-9]/)) strength += 30;
+
+  bar.style.width = strength + "%";
+
+  if (strength < 50) bar.className = "progress-bar bg-danger";
+  else if (strength < 80) bar.className = "progress-bar bg-warning";
+  else bar.className = "progress-bar bg-success";
+}
+
+// -----------------------------------------------------
 const storage = new StorageManager();
 
 const addAdminForm = document.getElementById("addAdminForm");
-const message = document.getElementById("message");
+// const message = document.getElementById("message");
 
 // from inputs
 const firstName = document.getElementById("firstName");
@@ -385,10 +460,10 @@ const lastName = document.getElementById("lastName");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 // error-msg
-const firstNameError = document.getElementById("firstNameError");
-const lastNameError = document.getElementById("lastNameError");
-const emailError = document.getElementById("emailError");
-const passwordError = document.getElementById("passwordError");
+// const firstNameError = document.getElementById("firstNameError");
+// const lastNameError = document.getElementById("lastNameError");
+// const emailError = document.getElementById("emailError");
+// const passwordError = document.getElementById("passwordError");
 
 addAdminForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -399,8 +474,9 @@ addAdminForm.addEventListener("submit", function (e) {
 
     if (users.some((u) => u.email === email.value.trim().toLowerCase())) {
       // Check Duplicates
-      message.textContent = "Email already registered!";
-      message.classList.add("text-danger");
+      // message.textContent = "Email already registered!";
+      // message.classList.add("text-danger");
+      throw new Error("Email already registered!");
     }
 
     const newAdmin = new User(
@@ -414,16 +490,24 @@ addAdminForm.addEventListener("submit", function (e) {
     console.log("after create new admin obj in dashboard");
 
     storage.pushToItem(KEYS.USERS, newAdmin.toJSON());
-    message.innerHTML =
-      '<div class="alert alert-success">Add new admin successful!</div>';
-    // alert("New admin account Created Successfully!");
-    setTimeout(() => {
-      window.location.href = "../../../pages/admin/dashboard.html";
-    }, 500);
+    // message.innerHTML =
+    //   '<div class="alert alert-success">Add new admin successful!</div>';
+    alert("New admin account Created Successfully!");
+    resetAvatar();
+    // setTimeout(() => {
+    //   window.location.href = "../../../pages/admin/dashboard.html";
+    // }, 500);
+    document
+      .querySelectorAll(".is-invalid")
+      .forEach((e) => e.classList.remove("is-invalid"));
+    document
+      .querySelectorAll(".is-valid")
+      .forEach((e) => e.classList.remove("is-valid"));
     addAdminForm.reset();
   } catch (error) {
-    message.textContent = error.message;
-    message.classList.add("text-danger");
+    // message.textContent = error.message;
+    // message.classList.add("text-danger");
+    alert(error.message);
   }
 });
 
@@ -432,10 +516,10 @@ firstName.addEventListener("blur", function () {
     UserValidations.validateName(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    firstNameError.innerText = "";
+    // firstNameError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    firstNameError.innerText = error.message;
+    // firstNameError.innerText = error.message;
   }
 });
 
@@ -444,11 +528,11 @@ lastName.addEventListener("blur", function () {
     UserValidations.validateName(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    lastNameError.innerText = "";
+    // lastNameError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    lastNameError.innerText = error.message;
-    console.log(error, message);
+    // lastNameError.innerText = error.message;
+    console.log(error.message);
   }
 });
 
@@ -457,10 +541,10 @@ email.addEventListener("blur", function () {
     UserValidations.validateEmail(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    emailError.innerText = "";
+    // emailError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    emailError.innerText = error.message;
+    // emailError.innerText = error.message;
   }
 });
 
@@ -469,10 +553,10 @@ password.addEventListener("blur", function () {
     UserValidations.validatePassword(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    passwordError.innerText = "";
+    // passwordError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    passwordError.innerText = error.message;
+    // passwordError.innerText = error.message;
   }
 });
 ///////
