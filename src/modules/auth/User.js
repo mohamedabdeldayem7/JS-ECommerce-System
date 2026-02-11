@@ -75,8 +75,7 @@ export class UserValidations {
   }
 
   static validatePassword(password) {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.* ]{6,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{6,}$/;
 
     if (!regex.test(password)) {
       throw new Error(
