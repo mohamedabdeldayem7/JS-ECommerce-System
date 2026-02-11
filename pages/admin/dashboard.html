@@ -162,7 +162,11 @@
             M
           </div>
           <div class="profile-name">
-            <p id="p-name" class="m-0 p-0" style="padding-top: 13px">
+            <p
+              id="p-name"
+              class="m-0 p-0"
+              style="padding-top: 13px; font-size: small; font-weight: 600"
+            >
               Muhammad
             </p>
             <small id="p-role" class="role m-0 p-0 text-muted">admin</small>
@@ -709,8 +713,8 @@
                     <div class="input-group">
                       <span
                         class="input-group-text bg-light border-end-0 text-muted"
-                        ><i class="bi bi-envelope"></i
-                      ></span>
+                        ><span class="material-symbols-rounded">mail</span>
+                      </span>
                       <input
                         type="email"
                         class="form-control bg-light border-start-0 ps-0"
@@ -733,17 +737,20 @@
                         href="javascript:void(0)"
                         onclick="generatePassword()"
                         class="small text-primary text-decoration-none fw-bold"
-                        ><i class="bi bi-magic"></i> Generate Secure</a
+                        ><span class="material-symbols-rounded"
+                          >auto_fix_high</span
+                        >
+                        Generate Secure</a
                       >
                     </div>
                     <div class="input-group">
-                      <!-- <span
+                      <span
                         class="input-group-text bg-light border-end-0 text-muted"
-                        ><i class="bi bi-lock"></i
-                      ></span> -->
+                        ><span class="material-symbols-rounded">lock</span>
+                      </span>
                       <input
                         type="password"
-                        class="form-control bg-light border-start-0 border-end-0 ps-3"
+                        class="form-control bg-light border-start-0 border-end-0"
                         id="password"
                         placeholder="••••••••"
                         required
