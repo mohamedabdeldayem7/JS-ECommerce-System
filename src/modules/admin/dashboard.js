@@ -500,6 +500,14 @@ password.addEventListener("blur", function () {
 //   }
 // });
 
+// logout section
+const cUser = storage.get("currentUser");
+document.getElementById("p-avatar").textContent =
+  cUser.firstName.toUpperCase()[0];
+document.getElementById("p-name").textContent =
+  cUser.firstName + " " + cUser.lastName;
+document.getElementById("p-role").textContent = cUser.role;
+
 const logoutBtn = document.getElementById("logoutMe");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", (e) => {

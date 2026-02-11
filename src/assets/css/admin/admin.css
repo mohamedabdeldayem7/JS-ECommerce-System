@@ -345,3 +345,14 @@ body {
 /* end section style */
 
 /* end main section style */
+#p-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  max-width: 500px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}

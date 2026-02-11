@@ -150,14 +150,37 @@
 
       <div class="mt-auto pt-4">
         <hr class="text-secondary opacity-25 mb-3" />
-        <a
-          id="logoutMe"
-          href="../auth/login.html"
-          class="nav-link logout-link d-flex align-items-center gap-3 text-danger"
+        <div
+          class="profile-with-logout d-flex justify-content-between align-items-center gap-3 p-2"
+          style="cursor: pointer"
         >
-          <span class="material-symbols-rounded">logout</span>
-          Logout
-        </a>
+          <div
+            id="p-avatar"
+            class="d-flex align-items-center justify-content-center fs-4 p-3"
+            style="
+              width: 45px;
+              height: 45px;
+              background-color: #080;
+              border-radius: 50%;
+              color: white;
+            "
+          >
+            M
+          </div>
+          <div class="profile-name">
+            <p id="p-name" class="m-0 p-0" style="padding-top: 13px">
+              Muhammad
+            </p>
+            <small id="p-role" class="role m-0 p-0 text-secondary">admin</small>
+          </div>
+          <a
+            id="logoutMe"
+            href="../auth/login.html"
+            class="nav-link logout-link d-flex align-items-center gap-1 text-danger"
+          >
+            <span class="material-symbols-rounded fs-3">logout</span>
+          </a>
+        </div>
       </div>
     </aside>
 
@@ -873,10 +896,8 @@
         </div>
       </div>
     </div>
-<!-- footer -->
-<footer class="footer" id="footerContainer">
-    </footer>
-
+    <!-- footer -->
+    <footer class="footer" id="footerContainer"></footer>
 
     <!-- script -->
 
