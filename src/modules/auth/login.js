@@ -34,3 +34,5 @@ loginForm.addEventListener("submit", (e) => {
 });
 
 AuthService.createNewAdmin();
+
+// localStorage.clear();

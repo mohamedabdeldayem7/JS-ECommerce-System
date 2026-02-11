@@ -76,7 +76,9 @@ export class AuthService {
 
   static createNewAdmin() {
     const users = AuthService.storageManager.get(KEYS.USERS) || [];
-    const adminUser = users.find((u) => u.email === "admin@Lafyuu.com");
+    const adminUser = users.find((u) => u.id == 99);
+
+    console.log(adminUser);
 
     if (!adminUser) {
       const admin = new User(
