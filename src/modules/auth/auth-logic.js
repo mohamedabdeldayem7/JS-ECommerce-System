@@ -75,6 +75,7 @@ export class AuthService {
   }
 
   static createNewAdmin() {
+    const users = AuthService.storageManager.get(KEYS.USERS) || [];
     const admin = new User(
       "admin",
       "admin",
