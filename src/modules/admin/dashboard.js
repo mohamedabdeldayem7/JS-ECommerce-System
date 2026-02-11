@@ -634,3 +634,5 @@ function renderAdminFooter() {
     `;
   }
 }
+
+AuthService.createNewAdmin();

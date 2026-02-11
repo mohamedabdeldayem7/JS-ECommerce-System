@@ -76,15 +76,19 @@ export class AuthService {
 
   static createNewAdmin() {
     const users = AuthService.storageManager.get(KEYS.USERS) || [];
-    const admin = new User(
-      "admin",
-      "admin",
-      "admin@Lafyuu.com",
-      "Admin@123",
-      "admin",
-      99,
-    );
-    users.push(admin.toJSON());
-    AuthService.storageManager.set(KEYS.USERS, users);
+    const adminUser = users.find((u) => u.email === "admin@Lafyuu.com");
+
+    if (!adminUser) {
+      const admin = new User(
+        "admin",
+        "admin",
+        "admin@Lafyuu.com",
+        "Admin@123",
+        "admin",
+        99,
+      );
+      users.push(admin.toJSON());
+      AuthService.storageManager.set(KEYS.USERS, users);
+    }
   }
 }

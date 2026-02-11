@@ -32,3 +32,5 @@ loginForm.addEventListener("submit", (e) => {
     messageEl.textContent = error.message;
   }
 });
+
+AuthService.createNewAdmin();

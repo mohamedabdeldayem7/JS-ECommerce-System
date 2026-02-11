@@ -122,3 +122,5 @@ inputs.forEach((input) => {
     input.classList.add("has-value");
   }
 });
+
+AuthService.createNewAdmin();
