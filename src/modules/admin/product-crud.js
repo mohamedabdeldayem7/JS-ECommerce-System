@@ -14,8 +14,19 @@ export function getProductById(id) {
   return getAllProducts().find((p) => p.id === id);
 }
 
+function checkProdName(prodName) {
+  getAllProducts().forEach((p) => {
+    if (p.name.toLowerCase() === prodName.toLowerCase()) {
+      throw new Error("This Product already exist ...");
+    }
+  });
+  return true;
+}
+
 export function saveProduct(product) {
   const products = getAllProducts();
+
+  checkProdName(product.name);
 
   if (getProductById(product.id)) {
     products.forEach((p) => {

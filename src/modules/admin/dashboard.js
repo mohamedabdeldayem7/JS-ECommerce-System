@@ -121,44 +121,46 @@ productForm.onsubmit = function (e) {
   const imageInput = document.getElementById("pImage").value;
   const descriptionInput = document.getElementById("pDes").value;
   const prodCategory = document.getElementById("prodCategory");
-
-  const category = getAllCategories().find(
-    (c) => c.name === prodCategory.value,
-  );
-
-  console.log("price from modal", typeof priceInput);
-
-  let product,
-    flag = true;
-
-  if (idInput) {
-    product = new Product(
-      nameInput,
-      descriptionInput,
-      category.id,
-      imageInput,
-      priceInput,
-      stockInput,
-      [],
-      idInput,
+  try {
+    const category = getAllCategories().find(
+      (c) => c.name === prodCategory.value,
     );
-    flag = false;
-  } else {
-    product = new Product(
-      nameInput,
-      descriptionInput,
-      category.id,
-      imageInput,
-      priceInput,
-      stockInput,
-      [],
-    );
+
+    console.log("price from modal", typeof priceInput);
+    let product,
+      flag = true;
+
+    if (idInput) {
+      product = new Product(
+        nameInput,
+        descriptionInput,
+        category.id,
+        imageInput,
+        priceInput,
+        stockInput,
+        [],
+        idInput,
+      );
+      flag = false;
+    } else {
+      product = new Product(
+        nameInput,
+        descriptionInput,
+        category.id,
+        imageInput,
+        priceInput,
+        stockInput,
+        [],
+      );
+    }
+    saveProduct(product);
+    let alertMsg = flag ? "added" : "modified";
+    alert(`Product with name "${product.name}" ${alertMsg} successfully`);
+    productModal.hide();
+    changePage(1);
+  } catch (e) {
+    alert(e.message);
   }
-  saveProduct(product);
-  let alertMsg = flag ? "added" : "modified";
-  alert(`Product with name "${product.name}" ${alertMsg} successfully`);
-  productModal.hide();
-  changePage(1);
 };
 
 // search ,filter and sort
@@ -304,24 +306,29 @@ window.openEditCategoryModal = function (id) {
 // submit product form
 categoryForm.onsubmit = function (e) {
   e.preventDefault();
+  try {
+    const idInput = parseInt(document.getElementById("editCategoryId").value);
+    const nameInput = document.getElementById("catName").value;
+    const descriptionInput = document.getElementById("catDesc").value;
 
-  const idInput = parseInt(document.getElementById("editCategoryId").value);
-  const nameInput = document.getElementById("catName").value;
-  const descriptionInput = document.getElementById("catDesc").value;
+    let category,
+      flag = true;
 
-  let category,
-    flag = true;
+    if (idInput) {
+      category = new Category(nameInput, descriptionInput, idInput);
+      flag = false;
+    } else {
+      category = new Category(nameInput, descriptionInput);
+    }
 
-  if (idInput) {
-    category = new Category(nameInput, descriptionInput, idInput);
-    flag = false;
-  } else {
-    category = new Category(nameInput, descriptionInput);
+    saveCategory(category);
+
+    categoryModal.hide();
+    let alertMsg = flag ? "added" : "modified";
+    alert(`Category with name "${category.name}" ${alertMsg} successfully`);
+  } catch (e) {
+    alert(e.message);
   }
-  saveCategory(category);
-  categoryModal.hide();
-  let alertMsg = flag ? "added" : "modified";
-  alert(`Category with name "${category.name}" ${alertMsg} successfully`);
 };
 
 window.deleteCategory = function (id) {
@@ -364,13 +371,88 @@ window.showToast = function (message, type = "success") {
 };
 
 // add admin section
+window.updateAvatar = function (name) {
+  const avatarEl = document.getElementById("dynamicAvatar");
+  if (name.trim() !== "") {
+    const initials = name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+    avatarEl.innerText = initials;
+    avatarEl.classList.remove("bg-opacity-10", "text-primary");
+    avatarEl.classList.add("bg-primary", "text-white");
+  } else {
+    resetAvatar();
+  }
+};
 
-// imports
+window.resetAvatar = function () {
+  const avatarEl = document.getElementById("dynamicAvatar");
+  avatarEl.innerHTML = '<i class="bi bi-person-plus-fill"></i>';
+  avatarEl.classList.add("bg-opacity-10", "text-primary");
+  avatarEl.classList.remove("bg-primary", "text-white");
+};
 
+window.generatePassword = function () {
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.*]{6,}$/;
+
+  const chars =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+  let password = "";
+  do {
+    password = "";
+    for (let i = 0; i < 12; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      password += chars[randomIndex];
+    }
+  } while (!regex.test(password));
+  const passInput = document.getElementById("password");
+  passInput.value = password;
+  passInput.type = "text";
+  document.getElementById("toggleIcon").textContent = "visibility_off";
+
+  checkStrength(password);
+};
+
+window.togglePassVisibility = function () {
+  const passInput = document.getElementById("password");
+  const icon = document.getElementById("toggleIcon");
+  if (passInput.type === "password") {
+    passInput.type = "text";
+    icon.textContent = "visibility_off";
+  } else {
+    passInput.type = "password";
+    icon.textContent = "visibility";
+  }
+};
+
+document.getElementById("password").addEventListener("input", function (e) {
+  checkStrength(e.target.value);
+});
+
+function checkStrength(password) {
+  const bar = document.getElementById("passStrengthBar");
+  let strength = 0;
+  if (password.length > 5) strength += 30;
+  if (password.match(/[A-Z]/)) strength += 20;
+  if (password.match(/[0-9]/)) strength += 20;
+  if (password.match(/[^a-zA-Z0-9]/)) strength += 30;
+
+  bar.style.width = strength + "%";
+
+  if (strength < 50) bar.className = "progress-bar bg-danger";
+  else if (strength < 80) bar.className = "progress-bar bg-warning";
+  else bar.className = "progress-bar bg-success";
+}
+
+// -----------------------------------------------------
 const storage = new StorageManager();
 
 const addAdminForm = document.getElementById("addAdminForm");
-const message = document.getElementById("message");
+// const message = document.getElementById("message");
 
 // from inputs
 const firstName = document.getElementById("firstName");
@@ -378,10 +460,10 @@ const lastName = document.getElementById("lastName");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 // error-msg
-const firstNameError = document.getElementById("firstNameError");
-const lastNameError = document.getElementById("lastNameError");
-const emailError = document.getElementById("emailError");
-const passwordError = document.getElementById("passwordError");
+// const firstNameError = document.getElementById("firstNameError");
+// const lastNameError = document.getElementById("lastNameError");
+// const emailError = document.getElementById("emailError");
+// const passwordError = document.getElementById("passwordError");
 
 addAdminForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -392,8 +474,9 @@ addAdminForm.addEventListener("submit", function (e) {
 
     if (users.some((u) => u.email === email.value.trim().toLowerCase())) {
       // Check Duplicates
-      message.textContent = "Email already registered!";
-      message.classList.add("text-danger");
+      // message.textContent = "Email already registered!";
+      // message.classList.add("text-danger");
+      throw new Error("Email already registered!");
     }
 
     const newAdmin = new User(
@@ -407,16 +490,24 @@ addAdminForm.addEventListener("submit", function (e) {
     console.log("after create new admin obj in dashboard");
 
     storage.pushToItem(KEYS.USERS, newAdmin.toJSON());
-    message.innerHTML =
-      '<div class="alert alert-success">Add new admin successful!</div>';
-    // alert("New admin account Created Successfully!");
-    setTimeout(() => {
-      window.location.href = "../../../pages/admin/dashboard.html";
-    }, 500);
+    // message.innerHTML =
+    //   '<div class="alert alert-success">Add new admin successful!</div>';
+    alert("New admin account Created Successfully!");
+    resetAvatar();
+    // setTimeout(() => {
+    //   window.location.href = "../../../pages/admin/dashboard.html";
+    // }, 500);
+    document
+      .querySelectorAll(".is-invalid")
+      .forEach((e) => e.classList.remove("is-invalid"));
+    document
+      .querySelectorAll(".is-valid")
+      .forEach((e) => e.classList.remove("is-valid"));
     addAdminForm.reset();
   } catch (error) {
-    message.textContent = error.message;
-    message.classList.add("text-danger");
+    // message.textContent = error.message;
+    // message.classList.add("text-danger");
+    alert(error.message);
   }
 });
 
@@ -425,10 +516,10 @@ firstName.addEventListener("blur", function () {
     UserValidations.validateName(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    firstNameError.innerText = "";
+    // firstNameError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    firstNameError.innerText = error.message;
+    // firstNameError.innerText = error.message;
   }
 });
 
@@ -437,11 +528,11 @@ lastName.addEventListener("blur", function () {
     UserValidations.validateName(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    lastNameError.innerText = "";
+    // lastNameError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    lastNameError.innerText = error.message;
-    console.log(error, message);
+    // lastNameError.innerText = error.message;
+    console.log(error.message);
   }
 });
 
@@ -450,10 +541,10 @@ email.addEventListener("blur", function () {
     UserValidations.validateEmail(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    emailError.innerText = "";
+    // emailError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    emailError.innerText = error.message;
+    // emailError.innerText = error.message;
   }
 });
 
@@ -462,10 +553,10 @@ password.addEventListener("blur", function () {
     UserValidations.validatePassword(this.value);
     this.classList.remove("is-invalid");
     this.classList.add("is-valid");
-    passwordError.innerText = "";
+    // passwordError.innerText = "";
   } catch (error) {
     this.classList.add("is-invalid");
-    passwordError.innerText = error.message;
+    // passwordError.innerText = error.message;
   }
 });
 ///////
@@ -493,6 +584,14 @@ password.addEventListener("blur", function () {
 //   }
 // });
 
+// logout section
+const cUser = storage.get("currentUser");
+document.getElementById("p-avatar").textContent =
+  cUser.firstName.toUpperCase()[0];
+document.getElementById("p-name").textContent =
+  cUser.firstName + " " + cUser.lastName;
+document.getElementById("p-role").textContent = cUser.role;
+
 const logoutBtn = document.getElementById("logoutMe");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", (e) => {
@@ -502,4 +601,32 @@ if (logoutBtn) {
       AuthService.logout();
     }
   });
+}
+
+setInterval(() => {
+  if (!AuthService.isAuthorized("admin")) {
+    alert("you cannot reach this page..!");
+    window.location.href = "../../../pages/auth/login.html";
+  }
+}, 500);
+
+//footer
+document.addEventListener("DOMContentLoaded", () => {
+  renderAdminFooter();
+});
+
+function renderAdminFooter() {
+  const footerContainer = document.getElementById("footerContainer");
+
+  if (footerContainer) {
+    footerContainer.classList.remove("footer");
+
+    footerContainer.classList.add("admin-footer");
+
+    footerContainer.innerHTML = ` 
+      <div style="text-align: center; padding: 30px 20px; color: #7e8993; font-size: 14px; border-top: 1px solid #dee2e6;">
+        &copy; 2026 Lafyuu Admin Panel. All rights reserved.
+      </div>
+    `;
+  }
 }

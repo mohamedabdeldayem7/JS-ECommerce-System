@@ -9,16 +9,7 @@ export class AuthService {
     const users = AuthService.storageManager.get(KEYS.USERS) || [];
 
     if (!users.length) {
-      const admin = new User(
-        "admin",
-        "admin",
-        "admin@gmail.com",
-        "Admin@123",
-        "admin",
-        99,
-      );
-      users.push(admin.toJSON());
-      AuthService.storageManager.set(KEYS.USERS, users);
+      AuthService.createNewAdmin();
     }
     if (users.some((u) => u.email === email.toLowerCase())) {
       throw new Error("Email already registered!");
@@ -37,16 +28,7 @@ export class AuthService {
     console.log(users);
 
     if (!users.length) {
-      const admin = new User(
-        "admin",
-        "admin",
-        "admin@gmail.com",
-        "Admin@123",
-        "admin",
-        999,
-      );
-      users.push(admin.toJSON());
-      AuthService.storageManager.set(KEYS.USERS, users);
+      AuthService.createNewAdmin();
     }
 
     const user = users.find(
@@ -64,19 +46,44 @@ export class AuthService {
 
   static logout() {
     AuthService.storageManager.eraseCookie(KEYS.CURRENT_USER);
-    localStorage.removeItem("currentUser");
+    AuthService.storageManager.remove("currentUser");
     window.location.href = "../../../pages/auth/login.html";
+    // window.location.href = "/JS-ECommerce-System/pages/auth/login.html";
   }
 
   static checkAuth() {
     const user = AuthService.storageManager.getCookie(KEYS.CURRENT_USER);
-    if (user === null) return null;
+    // if (user === null) return null;
     return user;
-    const cart = storageManager.get(KEYS.CART) || [];
-    const cusCart = cart.find((c) => c.user_id === user.id);
-    cusCart.items.push = {
-      itemQnt: 4,
-      itemId: prod.id,
-    };
+  }
+
+  static isAuthorized(role) {
+    const userId = parseInt(AuthService.checkAuth());
+    const users = AuthService.storageManager.get(KEYS.USERS) || [];
+
+    // console.log(userId, users, users.find((u) => u.id === userId).role);
+
+    if (
+      !userId ||
+      users.find((u) => u.id === userId).role.toLowerCase() !==
+        role.toLowerCase()
+    ) {
+      console.log(users.find((u) => u.id === userId));
+      return false;
+    }
+    return true;
+  }
+
+  static createNewAdmin() {
+    const admin = new User(
+      "admin",
+      "admin",
+      "admin@Lafyuu.com",
+      "Admin@123",
+      "admin",
+      99,
+    );
+    users.push(admin.toJSON());
+    AuthService.storageManager.set(KEYS.USERS, users);
   }
 }

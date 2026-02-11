@@ -3,10 +3,19 @@ import {
   saveCart,
   calculateTotals,
   placeOrder,
-} from "../../utils/storage/CartService.js";
-import { getWishlist } from "../../utils/storage/WishlistService.js";
-import { Navbar } from "../../components/navbar.js";
+} from "./CartService.js";
+import { getWishlist } from "../wishlist/WishlistService.js";
+import { Navbar } from "../../../components/navbar.js";
+import { Footer } from "../../../components/footer.js";
 
+/* ===================== NEW IMPORT ===================== */
+// ADDED: read current user id from cookies (same as orders & wishlist)
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
+/* ===================== END NEW IMPORT ===================== */
+
+// ADDED: storage instance
+const storage = new StorageManager();
 function getProducts() {
   return JSON.parse(localStorage.getItem("products")) || [];
 }
@@ -14,6 +23,12 @@ function getProducts() {
 function initializeNavbar() {
   const navbar = new Navbar("navbar-container", "../../");
   navbar.render();
+}
+
+function initializeFooter() {
+  const footer = new Footer("footer-container");
+  footer.render();
+  footer.updateYear();
 }
 
 function updateNavbarCounts() {
@@ -74,6 +89,20 @@ function renderCart() {
   const empty = document.getElementById("empty-cart");
   const summary = document.getElementById("order-summary");
   const count = document.getElementById("items-count");
+
+  /* ===================== MODIFIED ===================== */
+  // ADDED: get current user id from cookies
+  const currentUserId = storage.getCookie(KEYS.CURRENT_USER);
+
+  // ADDED: if user not logged in, show empty cart
+  if (!currentUserId) {
+    empty.classList.remove("d-none");
+    summary.classList.add("d-none");
+    count.textContent = "0 Items";
+    updateNavbarCounts();
+    return;
+  }
+  /* ===================== END MODIFIED ===================== */
 
   const cart = getCart();
   const products = getProducts();
@@ -141,7 +170,7 @@ function renderCart() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeNavbar();
-  // initializeFooter();
+  initializeFooter();
   renderCart();
   document.getElementById("clear-cart").onclick = clearCart;
   document.getElementById("place-order").onclick = placeOrder;

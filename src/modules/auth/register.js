@@ -22,6 +22,9 @@ registrationForm.addEventListener("submit", function (e) {
   try {
     console.log("try brfore register fun");
 
+    if (password.value !== repeatPassword.value) {
+      throw new Error("Passwords do not match!");
+    }
     AuthService.register(
       firstName.value,
       lastName.value,
@@ -101,5 +104,21 @@ repeatPassword.addEventListener("blur", function () {
     this.classList.remove("is-valid");
     this.classList.add("is-invalid");
     repeatPasswordError.innerText = "Passwords do not match!";
+  }
+});
+const inputs = document.querySelectorAll(".input-box input");
+
+inputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    if (input.value.trim() !== "") {
+      input.classList.add("has-value");
+    } else {
+      input.classList.remove("has-value");
+    }
+  });
+
+  // لو فيه قيمة بعد reload
+  if (input.value.trim() !== "") {
+    input.classList.add("has-value");
   }
 });

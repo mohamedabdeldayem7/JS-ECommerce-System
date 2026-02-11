@@ -1,14 +1,26 @@
-const CARTS_KEY  = "carts";
+const CARTS_KEY = "carts";
 const ORDERS_KEY = "orders";
 const PRODUCTS_KEY = "products";
 const CURRENT_USER_KEY = "currentUser";
 
-class CartService {
+/* ===================== NEW ===================== */
+// ADDED: use cookies instead of localStorage for current user
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
 
+const storage = new StorageManager();
+/* ===================== END NEW ===================== */
+
+class CartService {
   /* ===== USER ===== */
 
   static getCurrentUser() {
-    return JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+    /* ===================== MODIFIED ===================== */
+    // MODIFIED: read current user id from cookies
+    const userId = storage.getCookie(KEYS.CURRENT_USER);
+    if (!userId) return null;
+    return { id: userId };
+    /* ===================== END MODIFIED ===================== */
   }
 
   /* ===== PRODUCTS ===== */
@@ -52,14 +64,12 @@ class CartService {
   /* ===== TOTALS ===== */
 
   static calculateTotals(cartItems) {
-
     const products = this.getAllProducts();
 
     let subtotal = 0;
 
-    cartItems.forEach(item => {
-
-      const product = products.find(p => p.id === item.productId);
+    cartItems.forEach((item) => {
+      const product = products.find((p) => p.id === item.productId);
       if (!product) return;
 
       subtotal += product.price * item.quantity;
@@ -74,7 +84,6 @@ class CartService {
   /* ===== PLACE ORDER ===== */
 
   static placeOrder() {
-
     const user = this.getCurrentUser();
     if (!user) return;
 
@@ -87,8 +96,7 @@ class CartService {
     const orderItems = [];
 
     for (const item of cart) {
-
-      const product = products.find(p => p.id === item.productId);
+      const product = products.find((p) => p.id === item.productId);
 
       if (!product) continue;
 
@@ -101,7 +109,7 @@ class CartService {
 
       orderItems.push({
         productId: product.id,
-        quantity: item.quantity
+        quantity: item.quantity,
       });
     }
 
@@ -113,13 +121,12 @@ class CartService {
       items: orderItems,
       total: Number((total * 1.08).toFixed(2)),
       status: "pending",
-      date: new Date().toISOString().split("T")[0]
+      date: new Date().toISOString().split("T")[0],
     };
 
     orders.unshift(newOrder);
     localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
-    /* تفريغ سلة المستخدم فقط */
     this.saveCart([]);
 
     window.location.href = "my-orders.html";
@@ -128,14 +135,10 @@ class CartService {
 
 /* EXPORTS */
 
-export const getCart = () =>
-  CartService.getCart();
+export const getCart = () => CartService.getCart();
 
-export const saveCart = (items) =>
-  CartService.saveCart(items);
+export const saveCart = (items) => CartService.saveCart(items);
 
-export const calculateTotals = (items) =>
-  CartService.calculateTotals(items);
+export const calculateTotals = (items) => CartService.calculateTotals(items);
 
-export const placeOrder = () =>
-  CartService.placeOrder();
+export const placeOrder = () => CartService.placeOrder();

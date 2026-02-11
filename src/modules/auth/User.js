@@ -56,7 +56,7 @@ export class User {
 export class UserValidations {
   static validateEmail(vlaue) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!regex.test(vlaue)) {
+    if (!regex.test(vlaue.trim())) {
       console.log(vlaue);
 
       throw new Error("Format error: Please enter a valid email address.");
@@ -66,7 +66,7 @@ export class UserValidations {
 
   static validateName(name) {
     const regex = /^[a-zA-Z]{3,}$/;
-    if (!regex.test(name)) {
+    if (!regex.test(name.trim())) {
       throw new Error(
         "Name must be at least 3 characters and contain only letters.",
       );
@@ -77,9 +77,9 @@ export class UserValidations {
   static validatePassword(password) {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.*]{6,}$/;
-    if (!regex.test(password)) {
+    if (!regex.test(password.trim())) {
       throw new Error(
-        "Password too weak: Must include Uppercase, Lowercase, Number, and Special Character (Min 6 chars).",
+        "Password too weak: Must include Uppercase, Lowercase and Special Character (Min 6 chars).",
       );
     }
     return true;

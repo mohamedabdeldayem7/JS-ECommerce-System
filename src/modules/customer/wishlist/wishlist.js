@@ -2,10 +2,19 @@ import {
   getWishlist,
   removeFromWishlist,
   moveToCart
-} from "../../utils/storage/WishlistService.js";
-import { getCart } from "../../utils/storage/CartService.js";
-import { Navbar } from "../../components/navbar.js";
-import { Footer } from "../../components/footer.js";
+} from "./WishlistService.js";
+import { getCart } from "../cart/CartService.js";
+import { Navbar } from "../../../components/navbar.js";
+import { Footer } from "../../../components/footer.js";
+
+/* ===================== NEW IMPORT ===================== */
+// ADDED: to read current user from cookies (same as orders)
+import StorageManager from "../../../utils/storage/storage-helper.js";
+import KEYS from "../../../utils/keys.js";
+/* ===================== END NEW IMPORT ===================== */
+
+// ADDED: storage instance
+const storage = new StorageManager();
 
 function getProducts() {
   return JSON.parse(localStorage.getItem("products")) || [];
@@ -42,6 +51,20 @@ function renderWishlist() {
 
   const grid = document.getElementById("wishlist-grid");
   const empty = document.getElementById("empty-wishlist");
+
+ /* ===================== MODIFIED ===================== */
+  // ADDED: get current user id from cookies (same logic as orders)
+  const currentUserId = storage.getCookie(KEYS.CURRENT_USER);
+
+  // ADDED: if user not logged in, show empty state
+  if (!currentUserId) {
+    empty.classList.remove("d-none");
+    updateNavbarCounts();
+    return;
+  }
+  /* ===================== END MODIFIED ===================== */
+
+
 
   const wishlistIds = getWishlist();
   const products = getProducts();

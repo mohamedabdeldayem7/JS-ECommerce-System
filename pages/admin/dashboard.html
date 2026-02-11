@@ -150,14 +150,31 @@
 
       <div class="mt-auto pt-4">
         <hr class="text-secondary opacity-25 mb-3" />
-        <a
-          id="logoutMe"
-          href="../auth/login.html"
-          class="nav-link logout-link d-flex align-items-center gap-3 text-danger"
+        <div
+          class="profile-with-logout d-flex justify-content-between align-items-center gap-3 p-2"
+          style="cursor: pointer"
         >
-          <span class="material-symbols-rounded">logout</span>
-          Logout
-        </a>
+          <div
+            id="p-avatar"
+            class="d-flex align-items-center justify-content-center bg-primary fs-4 p-3"
+            style="width: 45px; height: 45px; border-radius: 50%; color: white"
+          >
+            M
+          </div>
+          <div class="profile-name">
+            <p id="p-name" class="m-0 p-0" style="padding-top: 13px">
+              Muhammad
+            </p>
+            <small id="p-role" class="role m-0 p-0 text-muted">admin</small>
+          </div>
+          <a
+            id="logoutMe"
+            href="../auth/login.html"
+            class="nav-link logout-link d-flex align-items-center gap-1 text-danger"
+          >
+            <span class="material-symbols-rounded fs-3">logout</span>
+          </a>
+        </div>
       </div>
     </aside>
 
@@ -615,67 +632,200 @@
       </section>
 
       <section id="admin" class="content-section d-none">
-        <div class="container mt-5">
-          <div class="row justify-content-center">
-            <div class="col-md-6">
-              <div class="card shadow">
-                <div class="card-body">
-                  <h3 class="text-center mb-4">Create Account</h3>
+        <div class="container py-5 d-flex justify-content-center">
+          <div class="col-lg-8 col-xl-6">
+            <div
+              class="card custom-card border-0 shadow-lg position-relative overflow-hidden"
+            >
+              <div
+                class="position-absolute top-0 start-0 w-100 bg-primary"
+                style="height: 6px"
+              ></div>
 
-                  <div
-                    class="w-100 d-flex align-items-center justify-content-center fs-6"
-                    id="message"
-                  ></div>
-
-                  <form id="addAdminForm">
-                    <div class="mb-3">
-                      <label class="form-label">First Name</label>
-                      <input
-                        type="text"
-                        id="firstName"
-                        class="form-control"
-                        placeholder="Enter first name"
-                      />
-                      <small class="text-danger" id="firstNameError"></small>
+              <div class="card-body p-5">
+                <div class="text-center mb-5">
+                  <div class="position-relative d-inline-block">
+                    <div
+                      id="dynamicAvatar"
+                      class="avatar-circle bg-primary bg-opacity-10 text-primary fw-bold fs-2 d-flex align-items-center justify-content-center mb-3 mx-auto"
+                    >
+                      <i class="bi bi-person-plus-fill"></i>
                     </div>
+                    <span
+                      class="position-absolute bottom-0 end-0 bg-success p-2 rounded-circle border border-white"
+                    ></span>
+                  </div>
+                  <h3 class="fw-bold text-dark">Create Admin Profile</h3>
+                  <p class="text-muted small">
+                    Enter the details to grant access rights.
+                  </p>
+                </div>
 
-                    <div class="mb-3">
-                      <label class="form-label">Last Name</label>
-                      <input
-                        type="text"
-                        id="lastName"
-                        class="form-control"
-                        placeholder="Enter last name"
-                      />
-                      <small class="text-danger" id="lastNameError"></small>
+                <form id="addAdminForm" novalidate>
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label small fw-bold text-secondary"
+                        >First Name</label
+                      >
+                      <div class="input-group">
+                        <span
+                          class="input-group-text bg-light border-end-0 text-muted"
+                          ><span class="material-symbols-rounded">person</span>
+                        </span>
+                        <input
+                          type="text"
+                          class="form-control bg-light border-start-0 ps-0"
+                          id="firstName"
+                          placeholder="e.g. Muhammad"
+                          oninput="updateAvatar(this.value)"
+                          required
+                        />
+                      </div>
                     </div>
-                    <div class="mb-3">
-                      <label class="form-label">Email</label>
+                    <div class="col-md-6">
+                      <label class="form-label small fw-bold text-secondary"
+                        >Last Name</label
+                      >
+                      <div class="input-group">
+                        <span
+                          class="input-group-text bg-light border-end-0 text-muted"
+                          ><span class="material-symbols-rounded">person</span>
+                        </span>
+                        <input
+                          type="text"
+                          class="form-control bg-light border-start-0 ps-0"
+                          id="lastName"
+                          placeholder="e.g. Ahmed"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="form-label small fw-bold text-secondary"
+                      >Email Address</label
+                    >
+                    <div class="input-group">
+                      <span
+                        class="input-group-text bg-light border-end-0 text-muted"
+                        ><i class="bi bi-envelope"></i
+                      ></span>
                       <input
                         type="email"
+                        class="form-control bg-light border-start-0 ps-0"
                         id="email"
-                        class="form-control"
-                        placeholder="Enter email"
+                        placeholder="user@Lafyuu.com"
+                        required
                       />
-                      <small class="text-danger" id="emailError"></small>
                     </div>
-                    <div class="mb-3">
-                      <label class="form-label">Password</label>
+                  </div>
+
+                  <div class="mb-4">
+                    <div
+                      class="d-flex justify-content-between align-items-center mb-1"
+                    >
+                      <label
+                        class="form-label small fw-bold text-secondary mb-0"
+                        >Password</label
+                      >
+                      <a
+                        href="javascript:void(0)"
+                        onclick="generatePassword()"
+                        class="small text-primary text-decoration-none fw-bold"
+                        ><i class="bi bi-magic"></i> Generate Secure</a
+                      >
+                    </div>
+                    <div class="input-group">
+                      <!-- <span
+                        class="input-group-text bg-light border-end-0 text-muted"
+                        ><i class="bi bi-lock"></i
+                      ></span> -->
                       <input
                         type="password"
+                        class="form-control bg-light border-start-0 border-end-0 ps-3"
                         id="password"
-                        class="form-control"
-                        placeholder="Enter password"
+                        placeholder="••••••••"
+                        required
+                        minlength="8"
                       />
-                      <small class="text-danger" id="passwordError"></small>
+                      <span
+                        class="input-group-text bg-light border-start-0 cursor-pointer"
+                        onclick="togglePassVisibility()"
+                      >
+                        <span class="material-symbols-rounded" id="toggleIcon">
+                          visibility
+                        </span>
+                      </span>
                     </div>
-                    <div class="d-grid">
-                      <button type="submit" class="btn btn-primary">
-                        Add Admin
-                      </button>
+                    <div class="progress mt-1" style="height: 4px">
+                      <div
+                        id="passStrengthBar"
+                        class="progress-bar"
+                        role="progressbar"
+                        style="width: 0%"
+                      ></div>
                     </div>
-                  </form>
-                </div>
+                  </div>
+
+                  <div class="mb-5">
+                    <label class="form-label small fw-bold text-secondary"
+                      >Access Role</label
+                    >
+                    <div class="role-selector d-flex gap-3">
+                      <input
+                        type="radio"
+                        class="btn-check"
+                        name="role"
+                        id="roleAdmin"
+                        value="Admin"
+                        checked
+                      />
+                      <label
+                        class="text-dark border w-100 p-3 text-start role-card"
+                        for="roleAdmin"
+                        style="border-radius: 10px"
+                      >
+                        <div
+                          class="d-flex align-items-center justify-content-start gap-2 ps-3"
+                        >
+                          <div
+                            class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle me-3"
+                          >
+                            <span class="material-symbols-rounded fs-4"
+                              >shield</span
+                            >
+                          </div>
+                          <div>
+                            <div class="fw-bold">Admin</div>
+                            <div
+                              class="small text-muted mt-1"
+                              style="font-size: 0.75rem"
+                            >
+                              Can manage Products & Orders and adding new Admin.
+                            </div>
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="d-grid gap-2">
+                    <button
+                      type="submit"
+                      class="btn btn-primary py-3 fw-bold shadow-sm hover-scale"
+                    >
+                      Create Account
+                    </button>
+                    <button
+                      type="reset"
+                      class="btn btn-link text-muted text-decoration-none"
+                      onclick="resetAvatar()"
+                    >
+                      Cancel & Reset
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -873,6 +1023,9 @@
         </div>
       </div>
     </div>
+    <!-- footer -->
+    <footer class="footer" id="footerContainer"></footer>
+
     <!-- script -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
