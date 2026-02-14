@@ -30,7 +30,11 @@ export default class Product {
     return this.name;
   }
   set setName(value) {
-    if (typeof value !== "string" || value.trim() === "")
+    if (
+      typeof value !== "string" ||
+      value.trim() === "" ||
+      value.trim().length <= 3
+    )
       throw new Error("Invalid name.");
     this.name = value;
   }

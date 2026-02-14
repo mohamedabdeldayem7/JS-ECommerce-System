@@ -195,6 +195,22 @@ body {
   background-color: #fff;
 }
 
+#productForm input,
+#productForm #prodCategory,
+#catName textarea {
+  transition: 0.5s ease;
+  background-color: var(--surface-white);
+  border: 1px solid var(--border-color);
+}
+
+#productForm input:focus,
+#productForm #prodCategory:focus,
+textarea:focus,
+#catName:focus {
+  border-color: var(--bs-primary) !important;
+  box-shadow: var(--shadow-md) !important;
+  background-color: #fff;
+}
 /* filter style */
 .custom-filter-btn {
   background-color: var(--surface-white, #fff);
