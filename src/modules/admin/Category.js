@@ -15,7 +15,11 @@ export default class Category {
     return this.name;
   }
   set setName(value) {
-    if (typeof value !== "string" || value.trim() === "")
+    if (
+      typeof value !== "string" ||
+      value.trim() === "" ||
+      value.trim().length <= 3
+    )
       console.error("Invalid name.");
     this.name = value;
   }
